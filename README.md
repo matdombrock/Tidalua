@@ -41,11 +41,18 @@ else
 end
 ```
 
+# OS Support
+- ✅ Linux
+- ✅ MacOS
+- ❓ Windows 
+
 # Dependencies
 ```
 portaudio
 portaudio-devel
 ```
+
+The `portaudio-dev` library is only required to build the project on Linux.
 
 # Building
 ```bash
