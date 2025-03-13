@@ -2,7 +2,6 @@
 -- Time based effects are done by using the sample_num variable
 -- The sample_num variable is the current sample number set by the C code
 
-
 -- Set the "speed" of the LFO
 -- This is just an arbitrary number
 local speed = 2048 * 128
@@ -15,4 +14,4 @@ local sin = math.sin(norm * math.pi)
 local pitch1 = 1 + sin * 4
 -- Use the pitch1 value to control the pitch of the first oscillator
 -- This will create an effect that sweeps the pitch up and down
-pitch(pitch1, 0)
+pitch(pitch1)
