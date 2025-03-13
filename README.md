@@ -1,5 +1,5 @@
 # 🌊 Wavescript 🌊
-An experimental synthesizer that uses Lua scripts to generate sound.
+An experimental synthesizer that uses Lua scripts to generate sound in a "live coding" environment.
 
 ### Scripting Example
 ```lua
@@ -68,7 +68,7 @@ Example:
 
 # Scripting
 - Scripts are run periodically as the synth is running.
-- Scripts will "hot reload" as the synth is running. Providing a "live coding" environement.
+- Scripts will "hot reload" as the synth is running. Providing a "live coding" environment.
 - Scripts are run in the context of the synth. 
     - This means that you can access the synth's state and functions.
 - Use the `sample_num` global to get the current sample number. 
