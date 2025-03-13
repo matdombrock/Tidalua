@@ -1,4 +1,4 @@
-# wavescript
+# 🌊 Wavescript 🌊
 An experimental synthesizer that uses Lua scripts to generate sound.
 
 
