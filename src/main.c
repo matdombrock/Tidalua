@@ -65,6 +65,12 @@ void debug(const char *format, ...) {
 
 
 // LUA BINDS
+int luaB_debug(lua_State *L) {
+    const char *msg = luaL_checkstring(L, 1);
+    debug("lua: %s\n", msg);
+    return 0;
+}
+
 int luaB_pitch(lua_State *L) {
     float val = luaL_checknumber(L, 1);
     int target = luaL_optinteger(L, 2, 0);
@@ -90,6 +96,7 @@ int luaB_wave(lua_State *L) {
     return 0;
 }
 void luaB_binds(lua_State *L) {
+    lua_register(L, "dbg", luaB_debug);  // Using dbg which is shorter and not a reserved name
     lua_register(L, "pitch", luaB_pitch);
     lua_register(L, "amp", luaB_amp);
     lua_register(L, "wave", luaB_wave);
@@ -102,8 +109,11 @@ void luaB_run() {
         lua_State *L = luaL_newstate();
         luaB_binds(L);
         luaL_openlibs(L);  // Load standard libraries
+        
+        // Pass system variables to Lua
         lua_pushnumber(L, _sys.sample_num);
         lua_setglobal(L, "sample_num");
+        
         //luaL_dofile(L, "test2.lua");
         if (luaL_dofile(L, _sys.filepath) != LUA_OK) {
             fprintf(stderr, "Lua error: %s\n", lua_tostring(L, -1));

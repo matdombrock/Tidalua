@@ -11,15 +11,15 @@ local scale = {1.0, 1.125, 1.25, 1.333, 1.5, 1.667, 1.875, 2.0}
 -- Define a melody as a sequence of notes (scale degrees, 0 = rest)
 local melody = {
     {note=1, duration=1}, {note=3, duration=1}, {note=5, duration=1}, {note=8, duration=1},
-    {note=5, duration=2}, {note=3, duration=1}, {note=5, duration=1}, 
+    {note=5, duration=2}, {note=3, duration=1}, {note=5, duration=1},
     {note=1, duration=1}, {note=3, duration=1}, {note=5, duration=2},
     {note=3, duration=2}, {note=1, duration=2}
 }
 
 -- Define a bassline
 local bassline = {
-    {note=1, duration=4}, 
-    {note=5, duration=4}, 
+    {note=1, duration=4},
+    {note=5, duration=4},
     {note=6, duration=4},
     {note=5, duration=4}
 }
@@ -72,7 +72,6 @@ local bass_note_position = prev_bass_beats / bassline[current_bass_note].duratio
 if melody[current_melody_note].note > 0 then
     -- Set the pitch from the scale
     pitch(scale[melody[current_melody_note].note], 0)
-    
     -- Simple envelope to make it sound nice
     local env = 0.8
     -- Add a slight attack
@@ -83,7 +82,6 @@ if melody[current_melody_note].note > 0 then
     if note_position > 0.8 then
         env = env * (1.0 - (note_position - 0.8) / 0.2)
     end
-    
     amp(env, 0)
     wave(1, 0) -- Sine wave for melody
 else
@@ -95,7 +93,6 @@ end
 if bassline[current_bass_note].note > 0 then
     -- Set the pitch from the scale (one octave down)
     pitch(scale[bassline[current_bass_note].note] / 2, 1)
-    
     -- Simple envelope with slight attack and longer sustain
     local env = 0.6
     -- Add attack
@@ -106,7 +103,6 @@ if bassline[current_bass_note].note > 0 then
     if bass_note_position > 0.7 then
         env = env * (1.0 - (bass_note_position - 0.7) / 0.3)
     end
-    
     amp(env, 1)
     wave(3, 1) -- Saw wave for bass
 else
@@ -114,8 +110,8 @@ else
     amp(0, 1)
 end
 
--- Display current note being played
-if sample_num % 2000 == 0 then
+-- Display current note being played (only if debug mode is enabled)
+if sample_num % 1000 == 0 then
     local melody_display = ""
     for i=1, #melody do
         if i == current_melody_note then
@@ -127,7 +123,6 @@ if sample_num % 2000 == 0 then
             melody_display = melody_display .. " "
         end
     end
-    
     local bass_display = ""
     for i=1, #bassline do
         if i == current_bass_note then
@@ -139,6 +134,7 @@ if sample_num % 2000 == 0 then
             bass_display = bass_display .. " "
         end
     end
-    
-    print("Melody: " .. melody_display .. " | Bass: " .. bass_display)
+    -- Use the dbg function that will only print in debug mode
+    dbg("Melody: " .. melody_display .. " | Bass: " .. bass_display)
+    dbg("Note position: " .. string.format("%.2f", note_position) .. " | Bass position: " .. string.format("%.2f", bass_note_position))
 end

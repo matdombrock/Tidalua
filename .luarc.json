@@ -3,6 +3,7 @@
         "pitch",
 	"amp",
 	"wave",
+	"dbg",
         "sample_num"
     ]
 }
