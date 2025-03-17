@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <portaudio.h>
 #include <string.h>
-#include "../lua/src/lua.h"
-#include "../lua/src/lauxlib.h"
-#include "../lua/src/lualib.h"
 
 #include "config.h"
 #include "globals.h"
