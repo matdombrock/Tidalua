@@ -5,7 +5,6 @@
 #include "globals.h"
 #include "util.h"
 #include "synth.h"
-#include "luaBinds.h"
 
 
 static int pa_callback(const void *input_buffer, void *output_buffer,
@@ -16,7 +15,8 @@ static int pa_callback(const void *input_buffer, void *output_buffer,
 {
     Synth_Internal *data = (Synth_Internal *)user_data;
     float *out = (float *)output_buffer;
-    luaB_run(); 
+    // Run Lua
+    synth_lua(); 
     // Generate samples
     synth_get_buffer(data, out); 
     return paContinue;
@@ -58,7 +58,7 @@ int pa_init() {
   }
   printf("------- AUDIO SYSTEM STARTED -------\n");
   printf("Press ENTER to stop the audio...\n");
-  char *modes[] = {"none", "debug", "visualizer"};
+  char modes[][32] = {"none", "debug", "visualizer"};
   printf("Console output mode: %s\n", modes[_sys.output_mode]);
   /*getchar();*/
 

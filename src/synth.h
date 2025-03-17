@@ -1,4 +1,5 @@
 #include <math.h>
+#include "luaBinds.h"
 #include "vis.h"
 #include "globals.h"
 
@@ -56,4 +57,6 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
     }
 }
 
-
+void synth_lua() {
+    luaB_run();
+}
