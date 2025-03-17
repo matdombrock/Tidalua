@@ -3,6 +3,8 @@
 #include "vis.h"
 #include "globals.h"
 
+// Represents the internal state of the oscillator
+// Not directly exposed to the user
 typedef struct {
   float phase1;
   float phase2;
