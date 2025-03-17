@@ -20,7 +20,7 @@ ExternalProject_Add(
     lua
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/lua
     CONFIGURE_COMMAND ""
-    BUILD_COMMAND make all
+    BUILD_COMMAND make all MYCFLAGS="-fPIC" MYLDFLAGS=""
     INSTALL_COMMAND ""
     BUILD_IN_SOURCE 1
 )
