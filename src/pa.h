@@ -8,21 +8,12 @@
 #include "synth.h"
 #include "luaBinds.h"
 
-
 typedef struct {
   float phase1;
   float phase2;
   float phase_increment;
 } Synth_Internal;
 
-typedef struct {
-  int freq;
-  int amp;
-  int sample_rate;
-  int frames_per_buffer;
-  int output_mode;
-  float downsample;
-} Pa_Opts;
 
 static int synth_callback(const void *input_buffer, void *output_buffer,
         unsigned long frames_per_buffer,
@@ -59,14 +50,14 @@ static int synth_callback(const void *input_buffer, void *output_buffer,
     return paContinue;
 }
 
-inline int pa_init(Pa_Opts opts, PaStreamCallback synth_callback) {
+inline int pa_init(PaStreamCallback synth_callback) {
   PaError err;
   PaStream *stream;
   Synth_Internal data;
 
   data.phase1 = 0.0f;
   data.phase2 = 0.0f;
-  data.phase_increment = 2.0f * M_PI * opts.freq / ((float)opts.sample_rate / opts.downsample);
+  data.phase_increment = 2.0f * M_PI * FREQUENCY / ((float)SAMPLE_RATE / DOWNSAMPLE);
 
   err = Pa_Initialize();
   if (err != paNoError) {
@@ -77,8 +68,8 @@ inline int pa_init(Pa_Opts opts, PaStreamCallback synth_callback) {
       0,          // no input channels
       1,          // mono output
       paFloat32,  // 32-bit floating point output
-      (float)opts.sample_rate / opts.downsample,
-      opts.frames_per_buffer,
+      (float)SAMPLE_RATE / DOWNSAMPLE,
+      FRAMES_PER_BUFFER,
       synth_callback,
       &data);
   if (err != paNoError) {
@@ -97,7 +88,7 @@ inline int pa_init(Pa_Opts opts, PaStreamCallback synth_callback) {
   printf("------- AUDIO SYSTEM STARTED -------\n");
   printf("Press ENTER to stop the audio...\n");
   char *modes[] = {"none", "debug", "visualizer"};
-  printf("Console output mode: %s\n", modes[opts.output_mode]);
+  printf("Console output mode: %s\n", modes[_sys.output_mode]);
   getchar();
 
   err = Pa_StopStream(stream);

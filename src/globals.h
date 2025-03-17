@@ -12,7 +12,7 @@ typedef struct {
     int sample_acc_i;
 } System;
 
-extern System _sys = {
+System _sys = {
     .filepath = "empty",
     .sample_num = 0,
     .output_mode = 0,
@@ -27,7 +27,7 @@ typedef struct {
     int wave;
 } Synth;
 
-extern Synth _synth[] = {
+Synth _synth[] = {
     {
         .pitch = 1.0f,
         .amp = 1.0f,
