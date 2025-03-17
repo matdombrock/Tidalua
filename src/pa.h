@@ -9,7 +9,7 @@
 
 
 static int synth_callback(const void *input_buffer, void *output_buffer,
-        unsigned long frames_per_buffer,
+        unsigned long buffer_size,
         const PaStreamCallbackTimeInfo *time_info,
         PaStreamCallbackFlags status_flags,
         void *user_data)
@@ -40,7 +40,7 @@ int pa_init() {
       1,          // mono output
       paFloat32,  // 32-bit floating point output
       (float)SAMPLE_RATE / DOWNSAMPLE,
-      FRAMES_PER_BUFFER,
+      BUFFER_SIZE,
       synth_callback,
       &data);
   if (err != paNoError) {

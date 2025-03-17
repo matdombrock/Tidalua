@@ -35,7 +35,7 @@ float synth_get_sample(float phase, int osc) {
 
 
 void synth_get_buffer(Synth_Internal *data, float *out) {
-  for (int i = 0; i < FRAMES_PER_BUFFER; i++) {
+  for (int i = 0; i < BUFFER_SIZE; i++) {
         float sample1 = AMPLITUDE * synth_get_sample(data->phase1, 0);
         float sample2 = AMPLITUDE * synth_get_sample(data->phase2, 1);
         float mix = ((sample1 * _synth[0].amp) + (sample2 * _synth[1].amp)) / 2.0f;
