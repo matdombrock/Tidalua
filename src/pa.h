@@ -8,7 +8,7 @@
 #include "luaBinds.h"
 
 
-static int synth_callback(const void *input_buffer, void *output_buffer,
+static int pa_callback(const void *input_buffer, void *output_buffer,
         unsigned long buffer_size,
         const PaStreamCallbackTimeInfo *time_info,
         PaStreamCallbackFlags status_flags,
@@ -41,7 +41,7 @@ int pa_init() {
       paFloat32,  // 32-bit floating point output
       (float)SAMPLE_RATE / DOWNSAMPLE,
       BUFFER_SIZE,
-      synth_callback,
+      pa_callback,
       &data);
   if (err != paNoError) {
     fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
@@ -60,7 +60,7 @@ int pa_init() {
   printf("Press ENTER to stop the audio...\n");
   char *modes[] = {"none", "debug", "visualizer"};
   printf("Console output mode: %s\n", modes[_sys.output_mode]);
-  getchar();
+  /*getchar();*/
 
   err = Pa_StopStream(stream);
   if (err != paNoError) {
