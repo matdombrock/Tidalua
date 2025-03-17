@@ -27,14 +27,14 @@ int luaB_debug(lua_State *L) {
     return 0;
 }
 
-int luaB_activate(lua_State *L) {
+int luaB_enable(lua_State *L) {
     int target = luaB_get_target(L, 1);
     _synth[target].enabled = 1;
     debug("lua: activate(%d)\n", target);
     return 0;
 }
 
-int luaB_deactivate(lua_State *L) {
+int luaB_disable(lua_State *L) {
     int target = luaB_get_target(L, 1);
     _synth[target].enabled = 0;
     debug("lua: deactivate(%d)\n", target);
@@ -85,9 +85,9 @@ int luaB_wave(lua_State *L) {
 int luaB_solo(lua_State *L) {
     int target = luaB_get_target(L, 1);
     for (int i = 0; i < OSC_COUNT; i++) {
-        _synth[i].amp = 0.0f;
+        _synth[i].enabled = 0;
     }
-    _synth[target].amp = 1.0f;
+    _synth[target].enabled = 1;
     debug("lua: solo(%d)\n", target);
     return 0;
 }
@@ -108,8 +108,8 @@ int luaB_lowpass(lua_State *L) {
 }
 void luaB_binds(lua_State *L) {
     lua_register(L, "dbg", luaB_debug);  // Using dbg which is shorter and not a reserved name
-    lua_register(L, "activate", luaB_activate);
-    lua_register(L, "deactivate", luaB_deactivate);
+    lua_register(L, "enable", luaB_enable);
+    lua_register(L, "disable", luaB_disable);
     lua_register(L, "freq", luaB_freq);
     lua_register(L, "note", luaB_note);
     lua_register(L, "detune", luaB_detune);

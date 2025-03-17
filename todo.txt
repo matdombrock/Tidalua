@@ -1,0 +1,3 @@
+per voice fx (lowpass)
+more fx (reverb, delay, bitcrush)
+adsr

@@ -1,6 +1,5 @@
-local is_left = math.floor(seconds) % 2 == 0
-if (is_left) then
-  pan(-1)
-else
-  pan(1)
-end
+-- A pan value of -1 pans fully to the left
+-- A pan value of 1 pans fully to the right
+-- A pan value of 0 pans to the center
+-- Use a sine wave to alternate the pan value between -1 -> 1
+pan(math.sin(seconds * 2))

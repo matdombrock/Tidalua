@@ -1,5 +1,7 @@
 {
   "diagnostics.globals": [
+	"enable",
+	"disable",
         "freq",
 	"note",
 	"detune",

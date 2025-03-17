@@ -1,6 +1,7 @@
 #pragma once
 #include <math.h>
 #include <time.h>
+#include <stdlib.h>
 #include "luaBinds.h"
 #include "vis.h"
 #include "globals.h"
@@ -28,7 +29,7 @@ void synth_init() {
 }
 
 float synth_get_sample(float phase, int osc) {
-    int mode = _synth[osc].wave % 4; 
+    int mode = _synth[osc].wave % 6; // Wrap wave mode
     float sample = 0.0f;
     switch (mode) {
         case 0: // Off
@@ -42,6 +43,12 @@ float synth_get_sample(float phase, int osc) {
             break;
         case 3: // Saw
             sample = 2.0f * (phase / (2.0f * M_PI)) - 1.0f;
+            break;
+        case 4: // Triangle
+            sample = 2.0f * fabsf(2.0f * (phase / (2.0f * M_PI)) - 1.0f) - 1.0f;
+            break;
+        case 5: // Noise
+            sample = 2.0f * ((float)rand() / (float)RAND_MAX) - 1.0f;
             break;
         default: // Off
             sample = 0;
@@ -81,7 +88,7 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
                 continue;
             }
             enabled_count++;
-            samples[ii] = AMPLITUDE * synth_get_sample(data->phase[ii], 0);
+            samples[ii] = AMPLITUDE * synth_get_sample(data->phase[ii], ii);
         }
         float mixL = 0;
         float mixR = 0;
