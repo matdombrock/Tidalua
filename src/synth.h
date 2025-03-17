@@ -10,9 +10,6 @@ typedef struct {
   float phase2;
 } Synth_Internal;
 
-
-const float phase_increment = 2.0f * M_PI * FREQUENCY / ((float)SAMPLE_RATE / DOWNSAMPLE);
-
 float synth_get_sample(float phase, int osc) {
     int mode = _synth[osc].wave % 4; 
     float sample = 0.0f;
@@ -36,6 +33,9 @@ float synth_get_sample(float phase, int osc) {
     return sample;
 }
 
+float synth_phase_increment(float freq, float detune) {
+    return 2.0f * M_PI * freq / ((float)SAMPLE_RATE / DOWNSAMPLE) * (1.0f + detune);
+}
 
 void synth_get_buffer(Synth_Internal *data, float *out) {
   for (int i = 0; i < BUFFER_SIZE; i++) {
@@ -44,11 +44,11 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
         float mix = ((sample1 * _synth[0].amp) + (sample2 * _synth[1].amp)) / 2.0f;
         *out++ = mix;
 
-        data->phase1 += phase_increment * _synth[0].pitch;
+        data->phase1 += synth_phase_increment(_synth[0].freq, _synth[0].detune);
         if (data->phase1 >= 2.0f * M_PI) {
             data->phase1 -= 2.0f * M_PI;
         }
-        data->phase2 += phase_increment * _synth[1].pitch;
+        data->phase2 += synth_phase_increment(_synth[1].freq, _synth[1].detune);
         if (data->phase2 >= 2.0f * M_PI) {
             data->phase2 -= 2.0f * M_PI;
         }

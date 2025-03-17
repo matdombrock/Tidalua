@@ -1,10 +1,11 @@
+#include <string.h>
 #include "../lua/src/lua.h"
 #include "../lua/src/lauxlib.h"
 #include "../lua/src/lualib.h"
 
 #include "globals.h"
 #include "util.h"
-
+#include "notes.h"
 
 // LUA BINDS
 int luaB_debug(lua_State *L) {
@@ -13,12 +14,35 @@ int luaB_debug(lua_State *L) {
     return 0;
 }
 
-int luaB_pitch(lua_State *L) {
+int luaB_freq(lua_State *L) {
     float val = luaL_checknumber(L, 1);
     int target = luaL_optinteger(L, 2, 0);
     target = target > 1 ? 1 : target;
-    _synth[target].pitch = val;
-    debug("lua: pitch(%f, %d)\n", val, target);
+    _synth[target].freq = val;
+    debug("lua: freq(%f, %d)\n", val, target);
+    return 0;
+}
+
+int luaB_note(lua_State *L) {
+    const char *note = luaL_checkstring(L, 1);
+    int target = luaL_optinteger(L, 2, 0);
+    target = target > 1 ? 1 : target;
+    for (int i = 0; i < sizeof(notes) / sizeof(Note); i++) {
+        if (strcmp(notes[i].name, note) == 0) {
+            _synth[target].freq = notes[i].freq;
+            debug("lua: note: %s, freq: %f, target: %d\n", note, notes[i].freq, target);
+            break;
+        }
+    }
+    return 0;
+}
+
+int luaB_detune(lua_State *L) {
+    float val = luaL_checknumber(L, 1);
+    int target = luaL_optinteger(L, 2, 0);
+    target = target > 1 ? 1 : target;
+    _synth[target].detune = val;
+    debug("lua: detune(%f, %d)\n", val, target);
     return 0;
 }
 int luaB_amp(lua_State *L) {
@@ -38,8 +62,10 @@ int luaB_wave(lua_State *L) {
     return 0;
 }
 void luaB_binds(lua_State *L) {
-    lua_register(L, "dbg", luaB_debug);  // Using dbg which is shorter and not a reserved name
-    lua_register(L, "pitch", luaB_pitch);
+    lua_register(L, "dbg", luaB_debug);  // Using dbg which is shorter and not a reserved nam
+    lua_register(L, "freq", luaB_freq);
+    lua_register(L, "note", luaB_note);
+    lua_register(L, "detune", luaB_detune);
     lua_register(L, "amp", luaB_amp);
     lua_register(L, "wave", luaB_wave);
 }

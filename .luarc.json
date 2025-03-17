@@ -1,6 +1,8 @@
 {
   "diagnostics.globals": [
-        "pitch",
+        "freq",
+	"note",
+	"detune",
 	"amp",
 	"wave",
 	"dbg",

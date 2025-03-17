@@ -22,19 +22,22 @@ System _sys = {
 
 // Synth state
 typedef struct {
-    float pitch;
+    float freq;
+    float detune;
     float amp;
     int wave;
 } Synth;
 
 Synth _synth[] = {
     {
-        .pitch = 1.0f,
+        .freq = FREQUENCY,
+        .detune = 0.0f,
         .amp = 1.0f,
         .wave = 1,
     },
     {
-        .pitch = 1.0f,
+        .freq = FREQUENCY,
+        .detune = 0.0f,
         .amp = 1.0f,
         .wave = 0,
     },

@@ -15,5 +15,6 @@ int main(int argc, char *argv[])
         } 
     }   
     pa_init();
+    printf("exiting...\n");
     return 0;
 }

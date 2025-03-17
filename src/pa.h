@@ -2,7 +2,7 @@
 #include <math.h>
 #include <portaudio.h>
 
-#include "globals.h"
+#include "config.h"
 #include "util.h"
 #include "synth.h"
 
@@ -60,7 +60,8 @@ int pa_init() {
   printf("Press ENTER to stop the audio...\n");
   char modes[][32] = {"none", "debug", "visualizer"};
   printf("Console output mode: %s\n", modes[_sys.output_mode]);
-  /*getchar();*/
+  // Wait for ENTER
+  getchar();
 
   err = Pa_StopStream(stream);
   if (err != paNoError) {
