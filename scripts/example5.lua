@@ -34,3 +34,5 @@ if norm > 0.5 then
 else
   amp(0.5, 1)
 end
+
+amp(0,1)
