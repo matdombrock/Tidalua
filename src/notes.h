@@ -1,3 +1,4 @@
+#pragma once
 typedef struct {
     char name[32];
     float freq;
@@ -210,3 +211,4 @@ Note notes[] = {
     {"B16", 2022946.56},
     {"C17", 2143237.12},
 };
+

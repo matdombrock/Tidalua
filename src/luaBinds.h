@@ -1,3 +1,4 @@
+#pragma once
 #include <string.h>
 #include "../lua/src/lua.h"
 #include "../lua/src/lauxlib.h"
@@ -17,7 +18,7 @@ int luaB_debug(lua_State *L) {
 int luaB_freq(lua_State *L) {
     float val = luaL_checknumber(L, 1);
     int target = luaL_optinteger(L, 2, 0);
-    target = target > 1 ? 1 : target;
+    target = target > OSC_COUNT ? OSC_COUNT : target;
     _synth[target].freq = val;
     debug("lua: freq(%f, %d)\n", val, target);
     return 0;
@@ -26,7 +27,7 @@ int luaB_freq(lua_State *L) {
 int luaB_note(lua_State *L) {
     const char *note = luaL_checkstring(L, 1);
     int target = luaL_optinteger(L, 2, 0);
-    target = target > 1 ? 1 : target;
+    target = target > OSC_COUNT ? OSC_COUNT : target;
     for (int i = 0; i < sizeof(notes) / sizeof(Note); i++) {
         if (strcmp(notes[i].name, note) == 0) {
             _synth[target].freq = notes[i].freq;
@@ -40,7 +41,7 @@ int luaB_note(lua_State *L) {
 int luaB_detune(lua_State *L) {
     float val = luaL_checknumber(L, 1);
     int target = luaL_optinteger(L, 2, 0);
-    target = target > 1 ? 1 : target;
+    target = target > OSC_COUNT ? OSC_COUNT : target;
     _synth[target].detune = val;
     debug("lua: detune(%f, %d)\n", val, target);
     return 0;
@@ -48,7 +49,7 @@ int luaB_detune(lua_State *L) {
 int luaB_amp(lua_State *L) {
     float val = luaL_checknumber(L, 1);
     int target = luaL_optinteger(L, 2, 0);
-    target = target > 1 ? 1 : target;
+    target = target > OSC_COUNT ? OSC_COUNT : target;
     _synth[target].amp = val;
     debug("lua: amp(%f, %d)\n", val, target);
     return 0;
@@ -56,7 +57,7 @@ int luaB_amp(lua_State *L) {
 int luaB_wave(lua_State *L) {
     int val = luaL_checkinteger(L, 1);
     int target = luaL_optinteger(L, 2, 0);
-    target = target > 1 ? 1 : target;
+    target = target > OSC_COUNT ? OSC_COUNT : target;
     _synth[target].wave = val;
     debug("lua: wave(%d, %d)\n", val, target);
     return 0;

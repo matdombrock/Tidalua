@@ -1,6 +1,4 @@
-#ifndef GLOBALS_H
-#define GLOBALS_H
-
+#pragma once
 #include "config.h"
 
 // System state
@@ -28,19 +26,5 @@ typedef struct {
     int wave;
 } Synth;
 
-Synth _synth[] = {
-    {
-        .freq = FREQUENCY,
-        .detune = 0.0f,
-        .amp = 1.0f,
-        .wave = 1,
-    },
-    {
-        .freq = FREQUENCY,
-        .detune = 0.0f,
-        .amp = 1.0f,
-        .wave = 0,
-    },
-};
+Synth _synth[OSC_COUNT];
 
-#endif // GLOBALS_H

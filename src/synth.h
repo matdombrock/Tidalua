@@ -1,3 +1,4 @@
+#pragma once
 #include <math.h>
 #include "luaBinds.h"
 #include "vis.h"
@@ -6,9 +7,20 @@
 // Represents the internal state of the oscillator
 // Not directly exposed to the user
 typedef struct {
-  float phase1;
-  float phase2;
+  float phase[OSC_COUNT];
 } Synth_Internal;
+
+void synth_init() { 
+    for (int i = 0; i < 8; i++) {
+        Synth def = {
+            .freq = FREQUENCY,
+            .detune = 0.0f,
+            .amp = 1.0f,
+            .wave = 1,
+        };
+        _synth[i] = def; 
+    }
+}
 
 float synth_get_sample(float phase, int osc) {
     int mode = _synth[osc].wave % 4; 
@@ -39,18 +51,21 @@ float synth_phase_increment(float freq, float detune) {
 
 void synth_get_buffer(Synth_Internal *data, float *out) {
   for (int i = 0; i < BUFFER_SIZE; i++) {
-        float sample1 = AMPLITUDE * synth_get_sample(data->phase1, 0);
-        float sample2 = AMPLITUDE * synth_get_sample(data->phase2, 1);
-        float mix = ((sample1 * _synth[0].amp) + (sample2 * _synth[1].amp)) / 2.0f;
+        float samples[OSC_COUNT];
+        for (int ii = 0; ii < OSC_COUNT; ii++) {
+            samples[ii] = AMPLITUDE * synth_get_sample(data->phase[ii], 0);
+        }
+        float mix = 0;
+        for (int ii = 0; ii < OSC_COUNT; ii++) {
+            mix += _synth[ii].amp * samples[ii];
+        }
         *out++ = mix;
 
-        data->phase1 += synth_phase_increment(_synth[0].freq, _synth[0].detune);
-        if (data->phase1 >= 2.0f * M_PI) {
-            data->phase1 -= 2.0f * M_PI;
-        }
-        data->phase2 += synth_phase_increment(_synth[1].freq, _synth[1].detune);
-        if (data->phase2 >= 2.0f * M_PI) {
-            data->phase2 -= 2.0f * M_PI;
+        for (int ii = 0; ii < OSC_COUNT; ii++) {
+            data->phase[ii] += synth_phase_increment(_synth[ii].freq, _synth[ii].detune);
+            if (data->phase[ii] >= 2.0f * M_PI) {
+                data->phase[ii] -= 2.0f * M_PI;
+            }
         }
         //
         vis_collect_sample(i, mix);

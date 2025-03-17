@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 #include <math.h>
 #include <portaudio.h>
@@ -26,9 +27,9 @@ int pa_init() {
   PaError err;
   PaStream *stream;
   Synth_Internal data;
-
-  data.phase1 = 0.0f;
-  data.phase2 = 0.0f;
+  for (int i = 0; i < OSC_COUNT; i++) {
+    data.phase[i] = 0.0f;
+  }
 
   err = Pa_Initialize();
   if (err != paNoError) {

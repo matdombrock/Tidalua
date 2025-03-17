@@ -8,3 +8,4 @@
 #define VIS_STRETCH 0 // Stretch the visualizer when downsampled
 #define VIS_WIDTH 128 // Width of the terminal visualizer
 #define LUA_RATE 8 // Lua code will run every N audio buffer fills
+#define OSC_COUNT 8
