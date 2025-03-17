@@ -15,10 +15,20 @@ int luaB_debug(lua_State *L) {
     return 0;
 }
 
+int luaB_get_target(lua_State *L, int pnum) {
+    int target = luaL_optinteger(L, pnum, 1);
+    target -= LUA_INDEX; // Lua indices start at 1 but C indices start at 0
+    if (target < 0) {
+        printf("lua warn: Lua indices start at 1. Got: %d\n", target);
+        target = 0;
+    }
+    target = target > OSC_COUNT ? OSC_COUNT : target;
+    return target;
+}
+
 int luaB_freq(lua_State *L) {
     float val = luaL_checknumber(L, 1);
-    int target = luaL_optinteger(L, 2, 0);
-    target = target > OSC_COUNT ? OSC_COUNT : target;
+    int target = luaB_get_target(L, 2); 
     _synth[target].freq = val;
     debug("lua: freq(%f, %d)\n", val, target);
     return 0;
@@ -26,8 +36,7 @@ int luaB_freq(lua_State *L) {
 
 int luaB_note(lua_State *L) {
     const char *note = luaL_checkstring(L, 1);
-    int target = luaL_optinteger(L, 2, 0);
-    target = target > OSC_COUNT ? OSC_COUNT : target;
+    int target = luaB_get_target(L, 2);
     for (int i = 0; i < sizeof(notes) / sizeof(Note); i++) {
         if (strcmp(notes[i].name, note) == 0) {
             _synth[target].freq = notes[i].freq;
@@ -39,25 +48,22 @@ int luaB_note(lua_State *L) {
 }
 
 int luaB_detune(lua_State *L) {
-    float val = luaL_checknumber(L, 1);
-    int target = luaL_optinteger(L, 2, 0);
-    target = target > OSC_COUNT ? OSC_COUNT : target;
+    float val = luaL_checknumber(L, 1); 
+    int target = luaB_get_target(L, 2);
     _synth[target].detune = val;
     debug("lua: detune(%f, %d)\n", val, target);
     return 0;
 }
 int luaB_amp(lua_State *L) {
     float val = luaL_checknumber(L, 1);
-    int target = luaL_optinteger(L, 2, 0);
-    target = target > OSC_COUNT ? OSC_COUNT : target;
+    int target = luaB_get_target(L, 2);
     _synth[target].amp = val;
     debug("lua: amp(%f, %d)\n", val, target);
     return 0;
 }
 int luaB_wave(lua_State *L) {
-    int val = luaL_checkinteger(L, 1);
-    int target = luaL_optinteger(L, 2, 0);
-    target = target > OSC_COUNT ? OSC_COUNT : target;
+    int val = luaL_checkinteger(L, 1); 
+    int target = luaB_get_target(L, 2);
     _synth[target].wave = val;
     debug("lua: wave(%d, %d)\n", val, target);
     return 0;
