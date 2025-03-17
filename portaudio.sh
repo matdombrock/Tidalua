@@ -6,5 +6,5 @@ curl -L -R -O https://files.portaudio.com/archives/$target.tgz
 tar zxf $target.tgz # unpacks to ./portaudio
 rm -rf $target.tgz
 cd portaudio
-cmake .
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF .
 make all

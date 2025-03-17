@@ -46,19 +46,14 @@ end
 - ✅ MacOS
 - ❓ Windows 
 
-# Dependencies
-```
-portaudio
-portaudio-devel
-```
-
-The `portaudio-devel` library is only required to build the project on Linux.
-
 # Building
+Initialise the build environment. This script downloads and sets up the necessary dependencies and builds the project.
 ```bash
-# Setup Lua
-./lua.sh
-# Build the project
+./init.sh
+```
+
+Once the project has been initalised you can rebuild it with:
+```bash
 ./build.sh
 ```
 
@@ -103,3 +98,4 @@ Example:
 
 ### Examples
 See the `scripts` directory for examples.
+
