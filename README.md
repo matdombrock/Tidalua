@@ -56,6 +56,9 @@ The `portaudio-devel` library is only required to build the project on Linux.
 
 # Building
 ```bash
+# Setup Lua
+./lua.sh
+# Build the project
 ./build.sh
 ```
 
