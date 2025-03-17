@@ -6,7 +6,6 @@
 int main(int argc, char *argv[])
 {
     _sys.filepath = argv[1];
-    // Simple debug flag
     if (argc > 2) {
         if (strcmp(argv[2], "d") == 0) {
             _sys.output_mode = 1;
