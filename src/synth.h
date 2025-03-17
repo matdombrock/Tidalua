@@ -49,6 +49,23 @@ float synth_phase_increment(float freq, float detune) {
     return 2.0f * M_PI * freq / ((float)SAMPLE_RATE / DOWNSAMPLE) * (1.0f + detune);
 }
 
+// Implements an Infinite Impulse Response (IIR) lowpass filter
+float synth_lowpass(float input, float cutoff, float dt) {
+    static float prev_input = 0.0f;
+    static float prev_output = 0.0f;
+
+    float RC = 1.0f / (2.0f * M_PI * cutoff);
+    float alpha = dt / (RC + dt);
+
+    float current_output = alpha * input + (1.0f - alpha) * prev_output;
+
+    prev_input = input;
+    prev_output = current_output;
+
+    return current_output;
+}
+
+
 void synth_get_buffer(Synth_Internal *data, float *out) {
   for (int i = 0; i < BUFFER_SIZE; i++) {
         float samples[OSC_COUNT];
@@ -59,6 +76,8 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
         for (int ii = 0; ii < OSC_COUNT; ii++) {
             mix += _synth[ii].amp * samples[ii];
         }
+        mix = mix / (float)OSC_COUNT;
+        mix = synth_lowpass(mix, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
         *out++ = mix;
 
         for (int ii = 0; ii < OSC_COUNT; ii++) {

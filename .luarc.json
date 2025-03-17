@@ -6,6 +6,7 @@
 	"amp",
 	"wave",
 	"mono",
+	"lowpass",
 	"dbg",
         "sample_num",
 	"seconds"

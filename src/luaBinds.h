@@ -8,13 +8,7 @@
 #include "util.h"
 #include "notes.h"
 
-// LUA BINDS
-int luaB_debug(lua_State *L) {
-    const char *msg = luaL_checkstring(L, 1);
-    debug("lua: %s\n", msg);
-    return 0;
-}
-
+// Lua util
 int luaB_get_target(lua_State *L, int pnum) {
     int target = luaL_optinteger(L, pnum, 1);
     target -= LUA_INDEX; // Lua indices start at 1 but C indices start at 0
@@ -24,6 +18,13 @@ int luaB_get_target(lua_State *L, int pnum) {
     }
     target = target > OSC_COUNT ? OSC_COUNT : target;
     return target;
+}
+
+// LUA BINDS
+int luaB_debug(lua_State *L) {
+    const char *msg = luaL_checkstring(L, 1);
+    debug("lua: %s\n", msg);
+    return 0;
 }
 
 int luaB_freq(lua_State *L) {
@@ -46,7 +47,6 @@ int luaB_note(lua_State *L) {
     }
     return 0;
 }
-
 int luaB_detune(lua_State *L) {
     float val = luaL_checknumber(L, 1); 
     int target = luaB_get_target(L, 2);
@@ -75,6 +75,14 @@ int luaB_mono(lua_State *L) {
     debug("lua: mono()\n");
     return 0;
 }
+int luaB_lowpass(lua_State *L) {
+    float cutoff = luaL_checknumber(L, 1);
+    float resonance = luaL_checknumber(L, 2);
+    _bus.lp_cutoff = cutoff;
+    _bus.lp_resonance = resonance;
+    debug("lua: lowpass(%f, %f)\n", cutoff, resonance);
+    return 0;
+}
 void luaB_binds(lua_State *L) {
     lua_register(L, "dbg", luaB_debug);  // Using dbg which is shorter and not a reserved nam
     lua_register(L, "freq", luaB_freq);
@@ -83,6 +91,7 @@ void luaB_binds(lua_State *L) {
     lua_register(L, "amp", luaB_amp);
     lua_register(L, "wave", luaB_wave);
     lua_register(L, "mono", luaB_mono);
+    lua_register(L, "lowpass", luaB_lowpass);
 }
 
 void luaB_run() {

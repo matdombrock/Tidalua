@@ -28,3 +28,11 @@ typedef struct {
 
 Synth _synth[OSC_COUNT];
 
+typedef struct {
+    float lp_cutoff;
+    float lp_resonance;
+} Bus;
+Bus _bus = {
+    .lp_cutoff = 20000.0f,
+    .lp_resonance = 1.0f,
+};
