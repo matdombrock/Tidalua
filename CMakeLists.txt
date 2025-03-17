@@ -20,7 +20,7 @@ ExternalProject_Add(
     lua
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/lua
     CONFIGURE_COMMAND ""
-    BUILD_COMMAND make linux
+    BUILD_COMMAND make all
     INSTALL_COMMAND ""
     BUILD_IN_SOURCE 1
 )
@@ -38,6 +38,8 @@ target_include_directories(wavescript PRIVATE ${LUA_INCLUDE_DIR})
 # Link libraries
 add_dependencies(wavescript lua)
 target_link_libraries(wavescript ${LUA_LIB} portaudio m)
+
+
 
 # Custom command to create 'out' directory and move binary and scripts
 add_custom_command(TARGET wavescript POST_BUILD
