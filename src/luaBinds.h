@@ -63,7 +63,9 @@ int luaB_wave(lua_State *L) {
     return 0;
 }
 int luaB_mono(lua_State *L) {
-    _synth[1].amp = 0.0f;
+    for (int i = 1; i < OSC_COUNT; i++) {
+        _synth[i].amp = 0;
+    }
     debug("lua: mono()\n");
     return 0;
 }

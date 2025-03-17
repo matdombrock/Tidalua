@@ -1,0 +1,4 @@
+make into a tracker
+correct lua indexing
+filters
+pan
