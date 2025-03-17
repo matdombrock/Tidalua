@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
-./portaudio.sh
-./lua.sh
+./clean.sh
+./deps.sh
 ./build.sh
