@@ -13,17 +13,6 @@ if(APPLE)
     link_directories(/opt/homebrew/Cellar/portaudio/19.7.0/lib)
 endif()
 
-include(ExternalProject)
-
-# Add the Lua library
-ExternalProject_Add(
-    lua
-    SOURCE_DIR ${CMAKE_SOURCE_DIR}/lua
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND make all MYCFLAGS="-fPIC" MYLDFLAGS=""
-    INSTALL_COMMAND ""
-    BUILD_IN_SOURCE 1
-)
 
 # Specify the path to the Lua library
 set(LUA_LIB ${CMAKE_SOURCE_DIR}/lua/src/liblua.a)
@@ -36,7 +25,6 @@ add_executable(wavescript ./src/main.c)
 target_include_directories(wavescript PRIVATE ${LUA_INCLUDE_DIR})
 
 # Link libraries
-add_dependencies(wavescript lua)
 target_link_libraries(wavescript ${LUA_LIB} portaudio m)
 
 
