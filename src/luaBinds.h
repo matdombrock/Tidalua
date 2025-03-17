@@ -81,6 +81,9 @@ void luaB_run() {
         // Pass system variables to Lua
         lua_pushnumber(L, _sys.sample_num);
         lua_setglobal(L, "sample_num");
+        float seconds = (float)_sys.sample_num / (float)SAMPLE_RATE;
+        lua_pushnumber(L, seconds);
+        lua_setglobal(L, "seconds");
         
         if (luaL_dofile(L, _sys.filepath) != LUA_OK) {
             fprintf(stderr, "Lua error: %s\n", lua_tostring(L, -1));

@@ -6,6 +6,7 @@
 	"amp",
 	"wave",
 	"dbg",
-        "sample_num"
+        "sample_num",
+	"seconds"
     ]
 }
