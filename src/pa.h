@@ -4,15 +4,8 @@
 
 #include "globals.h"
 #include "util.h"
-#include "vis.h"
 #include "synth.h"
 #include "luaBinds.h"
-
-typedef struct {
-  float phase1;
-  float phase2;
-  float phase_increment;
-} Synth_Internal;
 
 
 static int synth_callback(const void *input_buffer, void *output_buffer,
@@ -23,30 +16,9 @@ static int synth_callback(const void *input_buffer, void *output_buffer,
 {
     Synth_Internal *data = (Synth_Internal *)user_data;
     float *out = (float *)output_buffer;
-    unsigned long i;
-
     luaB_run(); 
-
     // Generate samples
-    for (i = 0; i < frames_per_buffer; i++) {
-        float sample1 = AMPLITUDE * synth_get_sample(data->phase1, 0);
-        float sample2 = AMPLITUDE * synth_get_sample(data->phase2, 1);
-        float mix = ((sample1 * _synth[0].amp) + (sample2 * _synth[1].amp)) / 2.0f;
-        *out++ = mix;
-
-        data->phase1 += data->phase_increment * _synth[0].pitch;
-        if (data->phase1 >= 2.0f * M_PI) {
-            data->phase1 -= 2.0f * M_PI;
-        }
-        data->phase2 += data->phase_increment * _synth[1].pitch;
-        if (data->phase2 >= 2.0f * M_PI) {
-            data->phase2 -= 2.0f * M_PI;
-        }
-        //
-        vis_collect_sample(i, mix);
-        vis_render();
-        _sys.sample_num++;
-    } 
+    synth_get_buffer(data, out); 
     return paContinue;
 }
 
@@ -57,7 +29,6 @@ int pa_init() {
 
   data.phase1 = 0.0f;
   data.phase2 = 0.0f;
-  data.phase_increment = 2.0f * M_PI * FREQUENCY / ((float)SAMPLE_RATE / DOWNSAMPLE);
 
   err = Pa_Initialize();
   if (err != paNoError) {
