@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include <time.h>
 #include "luaBinds.h"
 #include "vis.h"
 #include "globals.h"
@@ -16,10 +17,14 @@ void synth_init() {
             .freq = FREQUENCY,
             .detune = 0.0f,
             .amp = 1.0f,
+            .pan = 0.0f,
             .wave = 1,
+            .enabled = 0,
         };
         _synth[i] = def; 
     }
+    // Activate the first oscillator
+    _synth[0].enabled = 1;
 }
 
 float synth_get_sample(float phase, int osc) {
@@ -69,17 +74,34 @@ float synth_lowpass(float input, float cutoff, float dt) {
 void synth_get_buffer(Synth_Internal *data, float *out) {
   for (int i = 0; i < BUFFER_SIZE; i++) {
         float samples[OSC_COUNT];
+        int enabled_count = 0;
         for (int ii = 0; ii < OSC_COUNT; ii++) {
+            if (!_synth[ii].enabled) {
+                samples[ii] = 0;
+                continue;
+            }
+            enabled_count++;
             samples[ii] = AMPLITUDE * synth_get_sample(data->phase[ii], 0);
         }
-        float mix = 0;
+        float mixL = 0;
+        float mixR = 0;
         for (int ii = 0; ii < OSC_COUNT; ii++) {
-            mix += _synth[ii].amp * samples[ii];
+            // Negative values pan left, positive values pan right
+            float pan = _synth[ii].pan;
+            float panL = 0.5f - 0.5f * pan;
+            float panR = 0.5f + 0.5f * pan;
+            mixL += panL * _synth[ii].amp * samples[ii];
+            mixR += panR * _synth[ii].amp * samples[ii];
         }
-        mix = mix / (float)OSC_COUNT;
-        mix = synth_lowpass(mix, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
-        *out++ = mix;
+        mixL = mixL / (float)enabled_count;
+        mixR = mixR / (float)enabled_count;
+        mixL = synth_lowpass(mixL, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
+        mixR = synth_lowpass(mixR, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
+        /**out++ = mix;*/
+        out[i * 2] = mixL; // Left
+        out[i * 2 + 1] = mixR; // Right
 
+        // Increment phase
         for (int ii = 0; ii < OSC_COUNT; ii++) {
             data->phase[ii] += synth_phase_increment(_synth[ii].freq, _synth[ii].detune);
             if (data->phase[ii] >= 2.0f * M_PI) {
@@ -87,12 +109,27 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             }
         }
         //
-        vis_collect_sample(i, mix);
+        vis_collect_sample(i, mixL);
         vis_render();
         _sys.sample_num++;
     }
 }
 
 void synth_lua() {
+    debug("\nlua start\n");
+    struct timespec ts;
+    if (clock_gettime(CLOCK_REALTIME, &ts) == -1) {
+        perror("clock_gettime");
+        return;
+    }
     luaB_run();
+    struct timespec ts2;
+    if (clock_gettime(CLOCK_REALTIME, &ts2) == -1) {
+        perror("clock_gettime");
+        return;
+    }
+    // Calculate the time difference in nano seconds
+    long diff = ts2.tv_nsec - ts.tv_nsec;
+    // Log in microseconds
+    debug("lua time: %dµs \n", diff / 1000);
 }

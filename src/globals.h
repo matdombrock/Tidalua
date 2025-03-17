@@ -23,7 +23,9 @@ typedef struct {
     float freq;
     float detune;
     float amp;
+    float pan;
     int wave;
+    int enabled;
 } Synth;
 
 Synth _synth[OSC_COUNT];

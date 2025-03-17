@@ -1,0 +1,5 @@
+solo(1)
+wave(2, 1)
+local lfo = math.sin(seconds * 2)
+pan(lfo, 1)
+detune(lfo / 2, 1)

@@ -1,8 +1,8 @@
 #define SAMPLE_RATE 44100
 #define DOWNSAMPLE 1 // Downsample factor (1 = no downsample)
 #define FREQUENCY 440.0 / 2 // Base frequency (A4)
-#define AMPLITUDE 0.5 // Amplitude of the wave
-#define BUFFER_SIZE 256 // Number of frames (samples) per buffer
+#define AMPLITUDE 0.7 // Amplitude of the wave
+#define BUFFER_SIZE 1024 // Number of frames (samples) per buffer
 #define VIS_BUF_SIZE 256 // Size of the visualizer buffer
 #define VIS_DOWNSAMPLE 4  // Downsample factor (1 = no downsample)
 #define VIS_STRETCH 0 // Stretch the visualizer when downsampled

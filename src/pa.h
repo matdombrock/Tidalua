@@ -37,8 +37,8 @@ int pa_init() {
     return 1;
   }
   err = Pa_OpenDefaultStream(&stream,
-      0,          // no input channels
-      1,          // mono output
+      0,          // input channels
+      2,          // output channels
       paFloat32,  // 32-bit floating point output
       (float)SAMPLE_RATE / DOWNSAMPLE,
       BUFFER_SIZE,
