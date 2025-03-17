@@ -61,6 +61,11 @@ int luaB_wave(lua_State *L) {
     debug("lua: wave(%d, %d)\n", val, target);
     return 0;
 }
+int luaB_mono(lua_State *L) {
+    _synth[1].amp = 0.0f;
+    debug("lua: mono()\n");
+    return 0;
+}
 void luaB_binds(lua_State *L) {
     lua_register(L, "dbg", luaB_debug);  // Using dbg which is shorter and not a reserved nam
     lua_register(L, "freq", luaB_freq);
@@ -68,6 +73,7 @@ void luaB_binds(lua_State *L) {
     lua_register(L, "detune", luaB_detune);
     lua_register(L, "amp", luaB_amp);
     lua_register(L, "wave", luaB_wave);
+    lua_register(L, "mono", luaB_mono);
 }
 
 void luaB_run() {

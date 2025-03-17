@@ -5,6 +5,7 @@
 	"detune",
 	"amp",
 	"wave",
+	"mono",
 	"dbg",
         "sample_num",
 	"seconds"
