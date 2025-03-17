@@ -1,3 +1,14 @@
+#include <stdio.h>
+#include <math.h>
+#include <portaudio.h>
+#include <string.h>
+#include "../lua/src/lua.h"
+#include "../lua/src/lauxlib.h"
+#include "../lua/src/lualib.h"
+
+#include "config.h"
+#include "globals.h"
+
 void vis_collect_sample(int index, float mix) {
     if (_sys.output_mode != 2) return;
     if (index % VIS_DOWNSAMPLE == 0) {

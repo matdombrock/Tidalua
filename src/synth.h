@@ -1,3 +1,5 @@
+#include <math.h>
+#include "globals.h"
 float synth_get_sample(float phase, int osc) {
     int mode = _synth[osc].wave % 4; 
     float sample = 0.0f;

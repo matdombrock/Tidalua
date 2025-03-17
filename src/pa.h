@@ -50,7 +50,7 @@ static int synth_callback(const void *input_buffer, void *output_buffer,
     return paContinue;
 }
 
-inline int pa_init(PaStreamCallback synth_callback) {
+int pa_init() {
   PaError err;
   PaStream *stream;
   Synth_Internal data;
