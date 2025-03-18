@@ -1,6 +1,5 @@
 #pragma once
 #include <math.h>
-#include <time.h>
 #include <stdlib.h>
 #include "luaBinds.h"
 #include "vis.h"
@@ -25,6 +24,9 @@ void synth_init() {
             .lp_cutoff = 20000.0f,
             .lp_resonance = 1.0f,
             .lp_enabled = 0,
+            .hp_cutoff = 0.0f,
+            .hp_resonance = 1.0f,
+            .hp_enabled = 0,
             .wave = 1,
             .enabled = 0,
         };
@@ -34,7 +36,7 @@ void synth_init() {
     _synth[0].enabled = 1;
 }
 
-float get_ar(int osc) {
+float synth_get_ar(int osc) {
     float ar = 0.0f;
     float pos = _synth[osc].ar_pos;
     float attack_t = _synth[osc].ar[0];
@@ -48,7 +50,7 @@ float get_ar(int osc) {
     }
     _synth[osc].ar_pos += 1.0f / SAMPLE_RATE;
     if (_synth[osc].ar_pos > (attack_t + release_t)) {
-        _synth[osc].ar_pos = 0.0f;
+        _synth[osc].ar_pos = attack_t + release_t;
     }
     return ar;
 }
@@ -78,7 +80,7 @@ float synth_get_sample(float phase, int osc) {
             sample = 0;
             break;
     }
-    if (_synth[osc].ar_enabled) sample *= get_ar(osc);
+    if (_synth[osc].ar_enabled) sample *= synth_get_ar(osc);
     return sample;
 }
 
@@ -104,6 +106,24 @@ float synth_lowpass(int index, float input, float cutoff, float dt) {
     return current_output;
 }
 
+// Implements an Infinite Impulse Response (IIR) highpass filter
+float _synth_highpass_buf_in[2 + OSC_COUNT] = {0};
+float _synth_highpass_buf_out[2 + OSC_COUNT] = {0};
+float synth_highpass(int index, float input, float cutoff, float dt) {
+    float prev_input = _synth_highpass_buf_in[index];
+    float prev_output = _synth_highpass_buf_out[index];
+
+    float RC = 1.0f / (2.0f * M_PI * cutoff);
+    float alpha = RC / (RC + dt);
+
+    float current_output = alpha * prev_output + alpha * (input - prev_input);
+
+    _synth_highpass_buf_in[index] = input;
+    _synth_highpass_buf_out[index] = current_output;
+
+    return current_output;
+}
+
 
 void synth_get_buffer(Synth_Internal *data, float *out) {
   for (int i = 0; i < BUFFER_SIZE; i++) {
@@ -119,6 +139,9 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             if (_synth[ii].lp_enabled) {
                 sample = synth_lowpass(2 + ii, sample, _synth[ii].lp_cutoff, _synth[ii].lp_resonance / SAMPLE_RATE);
             }
+            if (_synth[ii].hp_enabled) {
+                sample = synth_highpass(2 + ii, sample, _synth[ii].hp_cutoff, _synth[ii].hp_resonance / SAMPLE_RATE);
+            }
             samples[ii] = sample;
         }
         float mixL = 0;
@@ -133,6 +156,7 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
         }
         mixL = mixL / (float)enabled_count;
         mixR = mixR / (float)enabled_count;
+        // Bus lowpass filter
         mixL = synth_lowpass(0, mixL, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
         mixR = synth_lowpass(1, mixR, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
         /**out++ = mix;*/
@@ -154,20 +178,5 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
 }
 
 void synth_lua() {
-    debug("\nlua start\n");
-    struct timespec ts;
-    if (clock_gettime(CLOCK_REALTIME, &ts) == -1) {
-        perror("clock_gettime");
-        return;
-    }
     luaB_run();
-    struct timespec ts2;
-    if (clock_gettime(CLOCK_REALTIME, &ts2) == -1) {
-        perror("clock_gettime");
-        return;
-    }
-    // Calculate the time difference in nano seconds
-    long diff = ts2.tv_nsec - ts.tv_nsec;
-    // Log in microseconds
-    debug("lua time: %dµs \n", diff / 1000);
 }

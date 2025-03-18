@@ -9,9 +9,12 @@
 	"wave",
 	"solo",
 	"pan",
-	"ar",
+	"atk_rel",
 	"lowpass",
+	"highpass",
+	"tick_speed",
 	"dbg",
-	"seconds"
+	"seconds",
+	"tick"
     ]
 }

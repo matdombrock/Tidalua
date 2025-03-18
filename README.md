@@ -49,7 +49,73 @@ Example:
 - Use the `sample_num` global to get the current sample number. 
     - This is the basis for creating time based effect.
 
-## Lua API
+## Lua API Globals
+
+### `seconds`
+The number of seconds that have passed since the synth started.
+
+### `tick`
+The current tick number. This is the basis for creating time based effects.
+
+The tick speed can be set with the `tick_speed` function.
+
+The Lua script is run once per tick.
+
+## Lua API Functions
+
+### `dbg(message)`
+Prints a message to the console if the console output mode is set to debug.
+
+### `enable(oscillator_number)`
+Enables an oscillator. The first oscillator is enabled by default.
+
+### `disable(oscillator_number)`
+Disables an oscillator.
+
+### `freq(frequency, oscillator_number)`
+Sets the frequency of an oscillator in Hz.
+
+### `note(note, oscillator_number)`
+Sets the frequency of an oscillator to a given note name.
+
+### `amp(amplitude, oscillator_number)`
+Sets the amplitude of an oscillator.
+
+### `wave(waveform_number, oscillator_number)`
+Sets the waveform of an oscillator.
+```
+0 = Off
+1 = Sine
+2 = Square
+3 = Sawtooth
+4 = Triangle
+5 = Noise
+```
+
+### `pan(pan, oscillator_number)`
+Sets the pan of an oscillator.
+
+A value of -1 is full left, 0 is center, and 1 is full right.
+
+### `atk_rel(attack, release, oscillator_number)`
+Sets the attack and release of an oscillator.
+
+Measured in ticks.
+
+### `solo(oscillator_number)`
+Sets an oscillator to solo mode. Only the soloed oscillator will be heard.
+
+### `lowpass(cutoff, resonance, oscillator_number)`
+Sets the lowpass filter of an oscillator.
+
+### `highpass(cutoff, resonance, oscillator_number)`
+Sets the highpass filter of an oscillator.
+
+### `tick_speed(speed)`
+Sets the speed of the script in ticks per second.
+
+### `bus_lowpass(cutoff, resonance)`
+Sets the lowpass filter of the master bus.
 
 ### Examples
 See the `scripts` directory for examples.
