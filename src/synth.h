@@ -19,6 +19,9 @@ void synth_init() {
             .detune = 0.0f,
             .amp = 1.0f,
             .pan = 0.0f,
+            .lp_cutoff = 20000.0f,
+            .lp_resonance = 1.0f,
+            .lp_enabled = 0,
             .wave = 1,
             .enabled = 0,
         };
@@ -62,17 +65,19 @@ float synth_phase_increment(float freq, float detune) {
 }
 
 // Implements an Infinite Impulse Response (IIR) lowpass filter
-float synth_lowpass(float input, float cutoff, float dt) {
-    static float prev_input = 0.0f;
-    static float prev_output = 0.0f;
+float _synth_lowpass_buf_in[2 + OSC_COUNT] = {0};
+float _synth_lowpass_buf_out[2 + OSC_COUNT] = {0};
+float synth_lowpass(int index, float input, float cutoff, float dt) {
+    float prev_input = _synth_lowpass_buf_in[index];
+    float prev_output = _synth_lowpass_buf_out[index];
 
     float RC = 1.0f / (2.0f * M_PI * cutoff);
     float alpha = dt / (RC + dt);
 
     float current_output = alpha * input + (1.0f - alpha) * prev_output;
 
-    prev_input = input;
-    prev_output = current_output;
+    _synth_lowpass_buf_in[index] = input;
+    _synth_lowpass_buf_out[index] = current_output;
 
     return current_output;
 }
@@ -88,7 +93,11 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
                 continue;
             }
             enabled_count++;
-            samples[ii] = AMPLITUDE * synth_get_sample(data->phase[ii], ii);
+            float sample = AMPLITUDE * synth_get_sample(data->phase[ii], ii);
+            if (_synth[ii].lp_enabled) {
+                sample = synth_lowpass(2 + ii, sample, _synth[ii].lp_cutoff, _synth[ii].lp_resonance / SAMPLE_RATE);
+            }
+            samples[ii] = sample;
         }
         float mixL = 0;
         float mixR = 0;
@@ -102,8 +111,8 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
         }
         mixL = mixL / (float)enabled_count;
         mixR = mixR / (float)enabled_count;
-        mixL = synth_lowpass(mixL, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
-        mixR = synth_lowpass(mixR, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
+        mixL = synth_lowpass(0, mixL, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
+        mixR = synth_lowpass(1, mixR, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
         /**out++ = mix;*/
         out[i * 2] = mixL; // Left
         out[i * 2 + 1] = mixR; // Right

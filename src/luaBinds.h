@@ -98,12 +98,22 @@ int luaB_pan(lua_State *L) {
     debug("lua: pan(%f, %d)\n", val, target);
     return 0;
 }
-int luaB_lowpass(lua_State *L) {
+int luaB_lowpass(lua_State *L){
+    float cutoff = luaL_checknumber(L, 1);
+    float resonance = luaL_optnumber(L, 2, 1.0f);
+    int target = luaB_get_target(L, 3);
+    _synth[target].lp_cutoff = cutoff;
+    _synth[target].lp_resonance = resonance;
+    _synth[target].lp_enabled = 1;
+    debug("lua: lowpass(%f, %f, %d)\n", cutoff, resonance, target);
+    return 0;
+}
+int luaB_bus_lowpass(lua_State *L) {
     float cutoff = luaL_checknumber(L, 1);
     float resonance = luaL_checknumber(L, 2);
     _bus.lp_cutoff = cutoff;
     _bus.lp_resonance = resonance;
-    debug("lua: lowpass(%f, %f)\n", cutoff, resonance);
+    debug("lua: bus_lowpass(%f, %f)\n", cutoff, resonance);
     return 0;
 }
 void luaB_binds(lua_State *L) {
@@ -118,6 +128,7 @@ void luaB_binds(lua_State *L) {
     lua_register(L, "solo", luaB_solo);
     lua_register(L, "pan", luaB_pan);
     lua_register(L, "lowpass", luaB_lowpass);
+    lua_register(L, "bus_lowpass", luaB_bus_lowpass);
 }
 
 void luaB_run() {

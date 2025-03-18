@@ -94,7 +94,7 @@ lead[7] = lead[3]
 lead[8] = lead[4]
 lead[9] = function()
   note("C5", 4)
-end 
+end
 lead[10] = function()
   note("E5", 4)
 end
