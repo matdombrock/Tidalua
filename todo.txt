@@ -1,3 +1,14 @@
 per voice fx (lowpass)
 more fx (reverb, delay, bitcrush)
+
 adsr
+attack and release are different
+pos tracked between
+attack triggers attack, release triggers release
+
+need a way to handle proper scheduling
+some kind of concept of ticks
+tick speed can be set
+a tick is something like 1/64th of a second by default
+ideally ticks are sample rate independant
+schedule(tick, fn)
