@@ -29,7 +29,13 @@ add_executable(wavescript ./src/main.c)
 target_include_directories(wavescript PRIVATE ${LUA_INCLUDE_DIR} ${PORTAUDIO_INCLUDE_DIR})
 
 # Link libraries
-target_link_libraries(wavescript ${LUA_LIB} ${PORTAUDIO_LIB} m "-framework CoreAudio" "-framework AudioUnit" "-framework AudioToolbox" "-framework CoreFoundation" "-framework Carbon")
+if(APPLE)
+    target_link_libraries(wavescript ${LUA_LIB} ${PORTAUDIO_LIB} m "-framework CoreAudio" "-framework AudioUnit" "-framework AudioToolbox" "-framework CoreFoundation" "-framework Carbon")
+endif()
+
+if(UNIX AND NOT APPLE)
+    target_link_libraries(wavescript ${LUA_LIB} ${PORTAUDIO_LIB} m pthread asound)
+endif()
 
 # Custom command to create 'out' directory and move binary and scripts
 add_custom_command(TARGET wavescript POST_BUILD
