@@ -19,6 +19,9 @@ void synth_init() {
             .detune = 0.0f,
             .amp = 1.0f,
             .pan = 0.0f,
+            .ar = {0.1f, 0.1f},
+            .ar_pos = 0.0f,
+            .ar_enabled = 0,
             .lp_cutoff = 20000.0f,
             .lp_resonance = 1.0f,
             .lp_enabled = 0,
@@ -31,6 +34,24 @@ void synth_init() {
     _synth[0].enabled = 1;
 }
 
+float get_ar(int osc) {
+    float ar = 0.0f;
+    float pos = _synth[osc].ar_pos;
+    float attack_t = _synth[osc].ar[0];
+    float release_t = _synth[osc].ar[1];
+    
+    if (pos > attack_t ) {// Release
+        ar = 1 - (( pos - attack_t ) / release_t);
+    }
+    else { // Attack
+        ar = pos / attack_t;
+    }
+    _synth[osc].ar_pos += 1.0f / SAMPLE_RATE;
+    if (_synth[osc].ar_pos > (attack_t + release_t)) {
+        _synth[osc].ar_pos = 0.0f;
+    }
+    return ar;
+}
 float synth_get_sample(float phase, int osc) {
     int mode = _synth[osc].wave % 6; // Wrap wave mode
     float sample = 0.0f;
@@ -57,6 +78,7 @@ float synth_get_sample(float phase, int osc) {
             sample = 0;
             break;
     }
+    if (_synth[osc].ar_enabled) sample *= get_ar(osc);
     return sample;
 }
 

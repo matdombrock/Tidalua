@@ -24,6 +24,9 @@ typedef struct {
     float detune;
     float amp;
     float pan;
+    float ar[2];
+    float ar_pos;
+    int ar_enabled;
     float lp_cutoff;
     float lp_resonance;
     int lp_enabled;
