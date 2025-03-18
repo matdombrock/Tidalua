@@ -5,6 +5,7 @@
 typedef struct {
     char *filepath;
     int sample_num;
+    int tick_num;
     int output_mode;
     float sample_acc[VIS_BUF_SIZE];
     int sample_acc_i;
@@ -13,6 +14,7 @@ typedef struct {
 System _sys = {
     .filepath = "empty",
     .sample_num = 0,
+    .tick_num = 0,
     .output_mode = 0,
     .sample_acc = {0},
     .sample_acc_i = 0,

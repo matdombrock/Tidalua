@@ -1,5 +1,6 @@
 #pragma once
 #include <string.h>
+#include <math.h>
 #include "../lua/src/lua.h"
 #include "../lua/src/lauxlib.h"
 #include "../lua/src/lualib.h"
@@ -143,24 +144,25 @@ void luaB_binds(lua_State *L) {
 }
 
 void luaB_run() {
-    if (_sys.sample_num % LUA_RATE == 0) {
-        float seconds = (float)_sys.sample_num / (float)SAMPLE_RATE;
-        debug("sample_num: %d\n", _sys.sample_num);
-        debug("seconds: %f\n", seconds);
-        // Init a new lua lua_State
-        lua_State *L = luaL_newstate();
-        luaB_binds(L);
-        luaL_openlibs(L);  // Load standard libraries
-        
-        // Pass system variables to Lua
-        lua_pushnumber(L, _sys.sample_num);
-        lua_setglobal(L, "sample_num");
-        lua_pushnumber(L, seconds);
-        lua_setglobal(L, "seconds");
-        
-        if (luaL_dofile(L, _sys.filepath) != LUA_OK) {
-            fprintf(stderr, "Lua error: %s\n", lua_tostring(L, -1));
-            lua_pop(L, 1); // remove error message from stack
-        }
+    float seconds = (float)_sys.sample_num / (float)SAMPLE_RATE;
+    int tick = floor(seconds * 128);
+    if (tick <= _sys.tick_num) return;
+    _sys.tick_num = tick;
+    debug("tick: %d\n", tick);
+    debug("seconds: %f\n", seconds);
+    // Init a new lua lua_State
+    lua_State *L = luaL_newstate();
+    luaB_binds(L);
+    luaL_openlibs(L);  // Load standard libraries
+
+    // Pass system variables to Lua
+    lua_pushnumber(L, seconds);
+    lua_setglobal(L, "seconds");
+    lua_pushnumber(L, tick);
+    lua_setglobal(L, "tick");
+
+    if (luaL_dofile(L, _sys.filepath) != LUA_OK) {
+        fprintf(stderr, "Lua error: %s\n", lua_tostring(L, -1));
+        lua_pop(L, 1); // remove error message from stack
     }
 }

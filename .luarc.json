@@ -12,7 +12,6 @@
 	"ar",
 	"lowpass",
 	"dbg",
-        "sample_num",
 	"seconds"
     ]
 }
