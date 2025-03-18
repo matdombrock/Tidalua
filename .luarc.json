@@ -9,6 +9,7 @@
 	"wave",
 	"solo",
 	"pan",
+	"ar",
 	"lowpass",
 	"dbg",
         "sample_num",
