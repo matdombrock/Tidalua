@@ -17,7 +17,7 @@ end
 tick_speed(0.8) -- max 1.0
 
 -- Apply some attack and release
-atk_rel(0.05, 0.15)
+atk_rel(8, 12)
 
 -- Trigger notes on quarter notes
 if oqn(tt, 1) then

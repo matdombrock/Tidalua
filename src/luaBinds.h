@@ -51,6 +51,15 @@ int luaB_freq(lua_State *L) {
     debug("lua: freq(%f, %d)\n", val, target);
     return 0;
 }
+int luaB_note_midi(lua_State *L) {
+    int note = luaL_checkinteger(L, 1);
+    int target = luaB_get_target(L, 2);
+    float freq = 440.0f * powf(2.0f, (note - 69) / 12.0f);
+    _synth[target].freq = freq;
+    _synth[target].ar_pos = 0;
+    debug("lua: note_midi: %d, freq: %f, target: %d\n", note, freq, target);
+    return 0;
+}
 
 int luaB_note(lua_State *L) {
     const char *note = luaL_checkstring(L, 1);
@@ -161,6 +170,7 @@ void luaB_binds(lua_State *L) {
     lua_register(L, "disable", luaB_disable);
     lua_register(L, "freq", luaB_freq);
     lua_register(L, "note", luaB_note);
+    lua_register(L, "note_midi", luaB_note_midi);
     lua_register(L, "detune", luaB_detune);
     lua_register(L, "amp", luaB_amp);
     lua_register(L, "wave", luaB_wave);

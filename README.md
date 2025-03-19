@@ -76,6 +76,8 @@ Notes:
 - Oscillator numbers start at 1.
   - Lua indexes start at 1 in general.
 - Most functions that take an `oscillator_numer` param will default to 1 if not provided.
+- Lua scripts are run in full before the any samples are generated
+    - This means whatever the last state the script leaves the synth in is what will be heard.
 
 ### `dbg(message)`
 Prints a message to the console if the console output mode is set to debug.
@@ -120,6 +122,22 @@ note("A4", 1)
 ```
 
 Range: `C0 -> C17`
+
+### `note_midi(midi_note_number, oscillator_number)`
+Sets the frequency of an oscillator to a given MIDI note number.
+
+```Lua
+-- Set the frequency of the first oscillator to MIDI note 69 (A4)
+note_midi(69, 1)
+```
+
+### `detune(cents, oscillator_number)`
+Sets the detune of an oscillator as a factor of the frequency.
+
+```Lua
+-- Detune the first oscillator by 50%
+detune(0.5, 1)
+```
 
 ### `amp(amplitude, oscillator_number)`
 Sets the amplitude of an oscillator.
