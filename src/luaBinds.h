@@ -106,8 +106,9 @@ int luaB_atk_rel(lua_State *L) {
     float attack = luaL_checknumber(L, 1);
     float release = luaL_checknumber(L, 2);
     int target = luaB_get_target(L, 3);
-    _synth[target].ar[0] = attack;
-    _synth[target].ar[1] = release;
+    // Input is in ticks, convert to seconds
+    _synth[target].ar[0] = attack / 128.0f;
+    _synth[target].ar[1] = release / 128.0f;
     _synth[target].ar_enabled = 1;
     debug("lua: atk_rel(%f, %f, %d)\n", attack, release, target);
     return 0;

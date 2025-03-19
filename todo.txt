@@ -4,5 +4,6 @@ adsr
 attack and release are different
 pos tracked between
 attack triggers attack, release triggers release
+if I can get the ar time to be input in ticks and convert ticks to seconds that should work
 
 Allow direct DSP
