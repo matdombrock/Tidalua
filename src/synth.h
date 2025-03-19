@@ -48,7 +48,7 @@ float synth_get_ar(int osc) {
     else { // Attack
         ar = pos / attack_t;
     }
-    _synth[osc].ar_pos += 1.0f / SAMPLE_RATE;
+    _synth[osc].ar_pos += (1.0f / SAMPLE_RATE) * _sys.tick_speed;
     if (_synth[osc].ar_pos > (attack_t + release_t)) {
         _synth[osc].ar_pos = attack_t + release_t;
     }
