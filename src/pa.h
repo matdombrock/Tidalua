@@ -62,6 +62,9 @@ int pa_init() {
   printf("------- AUDIO SYSTEM STARTED -------\n");
   char modes[][32] = {"none", "debug", "visualizer"};
   printf("Console output mode: %s\n", modes[_sys.output_mode]);
+  // Clear the Console
+  system("clear");
+
   char logo[] = " \
    __  _  _______  ___  __  ____         \r\n\
     \\ \\/ \\/ /\\__  \\ \\  \\/ /_/ __ \\        \r\n\
