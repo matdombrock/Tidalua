@@ -28,7 +28,7 @@ typedef struct {
     float detune;
     float amp;
     float pan;
-    float ar[2];
+    float ar[3];
     float ar_pos;
     int ar_enabled;
     float lp_cutoff;
@@ -41,7 +41,7 @@ typedef struct {
     int enabled;
 } Synth;
 
-Synth _synth[OSC_COUNT];
+Synth _synth[OSC_COUNT]; // Initialized in synth.h
 
 typedef struct {
     float lp_cutoff;

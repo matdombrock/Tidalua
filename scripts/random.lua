@@ -11,7 +11,7 @@ enable(2)
 enable(3)
 enable(4)
 
-atk_rel(12, 12, 4)
+atk_rel(12, 2, 12, 4)
 
 if tick % 128 == 1 then
   note(get_note_name(), 1)

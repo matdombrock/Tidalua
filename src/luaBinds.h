@@ -112,14 +112,16 @@ int luaB_pan(lua_State *L) {
     return 0;
 }
 int luaB_atk_rel(lua_State *L) {
-    float attack = luaL_checknumber(L, 1);
-    float release = luaL_checknumber(L, 2);
-    int target = luaB_get_target(L, 3);
     // Input is in ticks, convert to seconds
-    _synth[target].ar[0] = attack / 128.0f;
-    _synth[target].ar[1] = release / 128.0f;
+    float attack = luaL_checknumber(L, 1) / 128.0f;
+    float sustain = luaL_checknumber(L, 2) / 128.0f;
+    float release = luaL_checknumber(L, 3) / 128.0f;
+    int target = luaB_get_target(L, 4);
+    _synth[target].ar[0] = attack;
+    _synth[target].ar[1] = sustain;
+    _synth[target].ar[2] = release;
     _synth[target].ar_enabled = 1;
-    debug("lua: atk_rel(%f, %f, %d)\n", attack, release, target);
+    debug("lua: atk_rel(%f, %f, %f, %d)\n", attack, sustain, release, target);
     return 0;
 }
 int luaB_lowpass(lua_State *L){

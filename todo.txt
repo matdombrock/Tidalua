@@ -1,15 +1,19 @@
 more fx (reverb, delay, bitcrush)
 
 adsr
+
 attack and release are different
 pos tracked between
 attack triggers attack, release triggers release
-if I can get the ar time to be input in ticks and convert ticks to seconds that should work
 
-Attack / Decay use ticks
+
 
 Allow direct DSP
 
 Limiter
 
 Master volume
+
+tick_speed -> speed
+atk_rel -> env
+note_midi -> notem

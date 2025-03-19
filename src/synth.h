@@ -18,7 +18,7 @@ void synth_init() {
             .detune = 0.0f,
             .amp = 1.0f,
             .pan = 0.0f,
-            .ar = {0.1f, 0.1f},
+            .ar = {0.1f, 0.1f, 0.1f},
             .ar_pos = 0.0f,
             .ar_enabled = 0,
             .lp_cutoff = 20000.0f,
@@ -40,17 +40,29 @@ float synth_get_ar(int osc) {
     float ar = 0.0f;
     float pos = _synth[osc].ar_pos;
     float attack_t = _synth[osc].ar[0];
-    float release_t = _synth[osc].ar[1];
+    float sustain_t = _synth[osc].ar[1];
+    float release_t = _synth[osc].ar[2];
     
-    if (pos > attack_t ) {// Release
-        ar = 1 - (( pos - attack_t ) / release_t);
-    }
-    else { // Attack
+    if (pos < attack_t) { // Attack
         ar = pos / attack_t;
+    } 
+    else if (pos < (attack_t + sustain_t)) { // Sustain
+        ar = 1.0f;
+    } 
+    else { // Release
+        ar = 1.0f - (pos - attack_t - sustain_t) / release_t;
     }
+    /*if (pos > attack_t ) {// Release*/
+    /*    ar = 1 - (( pos - attack_t ) / release_t);*/
+    /*}*/
+    /**/
+    /*else { // Attack*/
+    /*    ar = pos / attack_t;*/
+    /*}*/
+
     _synth[osc].ar_pos += (1.0f / SAMPLE_RATE) * _sys.tick_speed;
-    if (_synth[osc].ar_pos > (attack_t + release_t)) {
-        _synth[osc].ar_pos = attack_t + release_t;
+    if (_synth[osc].ar_pos > (attack_t + release_t + sustain_t)) {
+        _synth[osc].ar_pos = attack_t + release_t + sustain_t;
     }
     return ar;
 }

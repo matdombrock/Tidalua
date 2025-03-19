@@ -149,6 +149,33 @@ amp(0.5, 1)
 
 Range: `0.0 -> 1.0`
 
+### `atk_rel(attack, sustain, release, oscillator_number)`
+Sets the attack, sustain and release of an oscillator for use in an amplitude envelope.
+
+Measured in ticks.
+
+By default, an oscillator does not use an amplitude envelope at all.
+
+The amplitude envelope will be applied to the oscillator only after it's been enabled by the `atk_rel` function.
+
+For an amplitude envelope to work, the note must be triggered only once then allowed to play out.
+
+The envelope position is reset every time the note is triggered.
+
+This means that we need to make sure the total length of the envelope is less than the total length of the note.
+
+```lua
+wave(3, 1)
+-- Set the attack, sustain and release of the first oscillator to 8, 64, 128 ticks
+atk_rel(8, 64, 128, 1)
+-- The total length of this envelope is 200 ticks
+-- Play it every 256 ticks to allow it to play out
+if tick % 256 == 1 then
+  note("C4", 1)
+end
+```
+
+
 ### `wave(waveform_number, oscillator_number)`
 Sets the waveform of an oscillator.
 ```
@@ -171,20 +198,6 @@ A value of -1 is full left, 0 is center, and 1 is full right.
 ```lua
 -- Set the pan of the first oscillator to full left
 pan(-1, 1)
-```
-
-### `atk_rel(attack, release, oscillator_number)`
-Sets the attack and release of an oscillator for use in an amplitude envelope.
-
-Measured in ticks.
-
-By default, an oscillator does not use an amplitude envelope at all.
-
-The amplitude envelope will be applied to the oscillator only after it's been enabled by the `atk_rel` function.
-
-```lua
--- Set the attack and release of the first oscillator to 32 ticks each
-atk_rel(32, 32, 1)
 ```
 
 ### `solo(oscillator_number)`

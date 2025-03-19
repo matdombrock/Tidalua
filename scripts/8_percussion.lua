@@ -2,7 +2,7 @@ local tt = tick % 128
 
 -- Kick drum
 -- A simple kick drum is made by detuning a sine wave oscillator
-atk_rel(8, 16, 1)
+atk_rel(8, 0, 16, 1)
 if tt == 1 then
   amp(1.8, 1)
   note("G3", 1)
@@ -16,7 +16,7 @@ end
 -- Snare drum
 -- A simple snare drum is made with a noise oscillator
 enable(2)
-atk_rel(16, 16, 2)
+atk_rel(16, 0, 16, 2)
 wave(5, 2)
 highpass(250, 4, 2)
 if tt == 1 then
@@ -30,7 +30,7 @@ end
 -- Hi-hat
 -- A simple hi-hat is also made with a noise oscillator
 enable(3)
-atk_rel(8, 16, 3)
+atk_rel(8, 0, 16, 3)
 wave(5, 3)
 highpass(12000, 4, 3)
 local hh_speed = 32
