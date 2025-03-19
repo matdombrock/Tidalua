@@ -1,0 +1,15 @@
+more fx (reverb, delay, bitcrush)
+
+Allow direct DSP
+
+Limiter
+
+Master volume
+
+tick_speed -> speed
+atk_rel -> env | ampe
+note_midi -> notem
+
+examples with import
+
+wavelab

@@ -2,3 +2,5 @@ build
 out
 ascript
 old_build
+lua
+portaudio

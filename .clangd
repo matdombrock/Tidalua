@@ -1,2 +1,5 @@
 CompileFlags:
   Add: -I/opt/homebrew/Cellar/portaudio/19.7.0/include
+Diagnostics:
+  Suppress:
+    - "misc-definitions-in-headers"

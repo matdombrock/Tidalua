@@ -1,9 +1,21 @@
 {
   "diagnostics.globals": [
-        "pitch",
+	"enable",
+	"disable",
+        "freq",
+	"note",
+	"note_midi",
+	"detune",
 	"amp",
 	"wave",
+	"solo",
+	"pan",
+	"atk_rel",
+	"lowpass",
+	"highpass",
+	"tick_speed",
 	"dbg",
-        "sample_num"
+	"seconds",
+	"tick"
     ]
 }
