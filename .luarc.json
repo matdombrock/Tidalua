@@ -13,7 +13,7 @@
 	"atk_rel",
 	"lowpass",
 	"highpass",
-	"tick_speed",
+	"speed",
 	"dbg",
 	"seconds",
 	"tick"

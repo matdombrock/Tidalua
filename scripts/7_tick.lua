@@ -14,7 +14,7 @@ local function oqn(_tt, n)
 end
 
 -- Set the tick speed
-tick_speed(0.8) -- max 1.0
+speed(0.8) -- max 1.0
 
 -- Apply some attack and release
 atk_rel(8, 0, 12)

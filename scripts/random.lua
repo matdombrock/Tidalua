@@ -24,4 +24,4 @@ if tick % 32 == 1 then
   note(get_note_name(2), 4)
 end
 
-tick_speed(0.75)
+speed(0.75)

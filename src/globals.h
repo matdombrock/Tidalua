@@ -9,7 +9,7 @@ typedef struct {
     int output_mode;
     float sample_acc[VIS_BUF_SIZE];
     int sample_acc_i;
-    float tick_speed;
+    float speed;
 } System;
 
 System _sys = {
@@ -19,7 +19,7 @@ System _sys = {
     .output_mode = 0,
     .sample_acc = {0},
     .sample_acc_i = 0,
-    .tick_speed = 1.0f,
+    .speed = 1.0f,
 };
 
 // Synth state

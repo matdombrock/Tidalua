@@ -144,18 +144,18 @@ int luaB_highpass(lua_State *L){
     debug("lua: highpass(%f, %f, %d)\n", cutoff, resonance, target);
     return 0;
 }
-int luaB_tick_speed(lua_State *L) {
+int luaB_speed(lua_State *L) {
     float val = luaL_checknumber(L, 1);
     if (val <= 0) {
-        printf("lua warn: tick_speed must be greater than 0\n");
+        printf("lua warn: speed must be greater than 0\n");
         val = 0.001f;
     }
     if (val > 1) {
-        printf("lua warn: tick_speed must be less than or equal to 1\n");
+        printf("lua warn: speed must be less than or equal to 1\n");
         val = 1.0f;
     }
-    _sys.tick_speed = val;
-    debug("lua: tick_speed(%f)\n", val);
+    _sys.speed = val;
+    debug("lua: speed(%f)\n", val);
     return 0;
 }
 int luaB_bus_lowpass(lua_State *L) {
@@ -181,14 +181,14 @@ void luaB_binds(lua_State *L) {
     lua_register(L, "atk_rel", luaB_atk_rel);
     lua_register(L, "lowpass", luaB_lowpass);
     lua_register(L, "highpass", luaB_highpass);
-    lua_register(L, "tick_speed", luaB_tick_speed);
+    lua_register(L, "speed", luaB_speed);
     lua_register(L, "bus_lowpass", luaB_bus_lowpass);
 }
 
 void luaB_run() { 
 
     float seconds = (float)_sys.sample_num / (float)SAMPLE_RATE;
-    int tick = floor(seconds * _sys.tick_speed * 128);
+    int tick = floor(seconds * _sys.speed * 128);
     if (tick <= _sys.tick_num) return;
 
     struct timespec ts;

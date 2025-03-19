@@ -35,12 +35,20 @@ detune(lfo / 2, 1)
 - ❓ Windows 
 
 # Building
-Initialise the build environment. This script downloads and sets up the necessary dependencies and builds the project.
+## External Build Dependencies
+- `curl`
+- `tar`
+- `make`
+- `cmake`
+- `clang` or `gcc`
+
+## First Build
+Initialize the build environment. This script downloads and sets up the necessary dependencies and builds the project.
 ```bash
 ./init.sh
 ```
 
-Once the project has been initalised you can rebuild it with:
+Once the project has been initialized you can rebuild it with:
 ```bash
 ./build.sh
 ```
@@ -60,6 +68,14 @@ Example:
 - `d` - Debug mode
 
 # Scripting
+- There are 8 oscillators total.
+- Only the first oscillator is enabled by default.
+    - Use `enable(oscillator_number)` to enable others.
+- Oscillator numbers start at 1.
+  - Lua indexes start at 1 in general.
+- Most functions that take an `oscillator_numer` param will default to 1 if not provided.
+- Lua scripts are run in full before the any samples are generated
+    - This means whatever the last state the script leaves the synth in is what will be heard.
 - Scripts are run periodically as the synth is running (once per tick).
 - Scripts will "hot reload" as the synth is running. Providing a "live coding" environment.
 - Scripts are run in the context of the synth. 
@@ -75,20 +91,9 @@ The number of seconds that have passed since the synth started.
 ### `tick`
 The current tick number. This is the basis for creating time based effects.
 
-By default, there are 128 ticks per second. See `tick_speed()` for info about changing this. 
+By default, there are 128 ticks per second. See `speed()` for info about changing this. 
 
 ## Lua API Functions
-
-Notes:
-- There are 8 oscillators total.
-- Only the first oscillator is enabled by default.
-    - Use `enable(oscillator_number)` to enable others.
-- Oscillator numbers start at 1.
-  - Lua indexes start at 1 in general.
-- Most functions that take an `oscillator_numer` param will default to 1 if not provided.
-- Lua scripts are run in full before the any samples are generated
-    - This means whatever the last state the script leaves the synth in is what will be heard.
-
 ### `dbg(message)`
 Prints a message to the console if the console output mode is set to debug.
 
@@ -166,7 +171,7 @@ Sets the attack, sustain and release of an oscillator for use in an amplitude en
 
 Measured in ticks.
 
-The amplitude evelope is applied as a factor of the amplitude set with `amp()`.
+The amplitude envelope is applied as a factor of the amplitude set with `amp()`.
 
 By default, an oscillator does not use an amplitude envelope at all.
 
@@ -239,7 +244,7 @@ Sets the highpass filter of an oscillator.
 highpass(1000, 0.5, 1)
 ```
 
-### `tick_speed(speed)`
+### `speed(speed)`
 Sets the speed of the script in ticks per second.
 
 For example setting the tick speed to `0.5` would result in 64 ticks per second.
@@ -250,7 +255,7 @@ The Lua script is run once per tick. Lowering the tick speed also means that the
 
 ```lua
 -- Set the tick speed to 0.5
-tick_speed(0.5)
+speed(0.5)
 ```
 
 ### `bus_lowpass(cutoff, resonance)`

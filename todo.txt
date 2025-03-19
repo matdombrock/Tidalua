@@ -13,3 +13,9 @@ note_midi -> notem
 examples with import
 
 wavelab
+tidalang
+tidal128
+tidalua
+ember moon
+moonsynth
+

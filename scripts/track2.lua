@@ -1,4 +1,4 @@
-tick_speed(0.6) -- max 1.0
+speed(0.6) -- max 1.0
 
 local tt = tick % 128
 
