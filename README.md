@@ -2,14 +2,24 @@
 An experimental synthesizer that uses Lua scripts to generate sound in a "live coding" environment.
 
 What is it?
-- Modular synthesizer
-- Tracker
-- Live coding environment
+- A modular synthesizer
+- A tracker
+- A live coding environment
+- A fun programming toy
+
+What isn't it?
+- A full featured DAW
+- A "professional" synthesizer
+- A traditional tracker
+- A "serious" audio tool
+- Lab equipment
 
 ### Scripting Example
 ```lua
 -- Set the waveform for the first voice to square
-wave(2)
+wave(2, 1)
+-- Play a note
+note("C4", 1)
 -- Create an LFO that oscillates between -1 and 1 every second
 local lfo = math.sin(seconds * 2)
 -- Set the pan of the first voice to the LFO value
@@ -142,6 +152,8 @@ detune(0.5, 1)
 ### `amp(amplitude, oscillator_number)`
 Sets the amplitude of an oscillator.
 
+This is independent of the master volume and amplitude envelopes.
+
 ```lua
 -- Set the amplitude of the first oscillator to 0.5
 amp(0.5, 1)
@@ -153,6 +165,8 @@ Range: `0.0 -> 1.0`
 Sets the attack, sustain and release of an oscillator for use in an amplitude envelope.
 
 Measured in ticks.
+
+The amplitude evelope is applied as a factor of the amplitude set with `amp()`.
 
 By default, an oscillator does not use an amplitude envelope at all.
 
@@ -174,7 +188,6 @@ if tick % 256 == 1 then
   note("C4", 1)
 end
 ```
-
 
 ### `wave(waveform_number, oscillator_number)`
 Sets the waveform of an oscillator.
