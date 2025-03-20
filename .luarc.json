@@ -15,6 +15,9 @@
 	"speed",
 	"dbg",
 	"seconds",
-	"tick"
+	"tick",
+	"bus_lowpass",
+	"bus_highpass",
+	"bus_amp"
     ]
 }
