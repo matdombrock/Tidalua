@@ -111,7 +111,7 @@ int luaB_pan(lua_State *L) {
     debug("lua: pan(%f, %d)\n", val, target);
     return 0;
 }
-int luaB_atk_rel(lua_State *L) {
+int luaB_env(lua_State *L) {
     // Input is in ticks, convert to seconds
     float attack = luaL_checknumber(L, 1) / 128.0f;
     float sustain = luaL_checknumber(L, 2) / 128.0f;
@@ -121,7 +121,7 @@ int luaB_atk_rel(lua_State *L) {
     _synth[target].ar[1] = sustain;
     _synth[target].ar[2] = release;
     _synth[target].ar_enabled = 1;
-    debug("lua: atk_rel(%f, %f, %f, %d)\n", attack, sustain, release, target);
+    debug("lua: env(%f, %f, %f, %d)\n", attack, sustain, release, target);
     return 0;
 }
 int luaB_lowpass(lua_State *L){
@@ -178,7 +178,7 @@ void luaB_binds(lua_State *L) {
     lua_register(L, "wave", luaB_wave);
     lua_register(L, "solo", luaB_solo);
     lua_register(L, "pan", luaB_pan);
-    lua_register(L, "atk_rel", luaB_atk_rel);
+    lua_register(L, "env", luaB_env);
     lua_register(L, "lowpass", luaB_lowpass);
     lua_register(L, "highpass", luaB_highpass);
     lua_register(L, "speed", luaB_speed);

@@ -166,7 +166,7 @@ amp(0.5, 1)
 
 Range: `0.0 -> 1.0`
 
-### `atk_rel(attack, sustain, release, oscillator_number)`
+### `env(attack, sustain, release, oscillator_number)`
 Sets the attack, sustain and release of an oscillator for use in an amplitude envelope.
 
 Measured in ticks.
@@ -175,7 +175,7 @@ The amplitude envelope is applied as a factor of the amplitude set with `amp()`.
 
 By default, an oscillator does not use an amplitude envelope at all.
 
-The amplitude envelope will be applied to the oscillator only after it's been enabled by the `atk_rel` function.
+The amplitude envelope will be applied to the oscillator only after it's been enabled by the `env` function.
 
 For an amplitude envelope to work, the note must be triggered only once then allowed to play out.
 
@@ -186,7 +186,7 @@ This means that we need to make sure the total length of the envelope is less th
 ```lua
 wave(3, 1)
 -- Set the attack, sustain and release of the first oscillator to 8, 64, 128 ticks
-atk_rel(8, 64, 128, 1)
+env(8, 64, 128, 1)
 -- The total length of this envelope is 200 ticks
 -- Play it every 256 ticks to allow it to play out
 if tick % 256 == 1 then
