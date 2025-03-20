@@ -68,18 +68,17 @@ Example:
 - `d` - Debug mode
 
 # Scripting
-- There are 8 oscillators total.
-- Only the first oscillator is enabled by default.
-    - Use `enable(oscillator_number)` to enable others.
 - Oscillator numbers start at 1.
   - Lua indexes start at 1 in general.
+- There are 8 oscillators total.
+    - The range for any `oscillator_number` param is `1 -> 8` (integer).
 - Most functions that take an `oscillator_numer` param will default to 1 if not provided.
+- Only the first oscillator is enabled by default.
+    - Use `enable(oscillator_number)` to enable others.
 - Lua scripts are run in full before the any samples are generated
     - This means whatever the last state the script leaves the synth in is what will be heard.
 - Scripts are run periodically as the synth is running (once per tick).
 - Scripts will "hot reload" as the synth is running. Providing a "live coding" environment.
-- Scripts are run in the context of the synth. 
-    - This means that you can access the synth's state and functions.
 - Use the `tick` or `seconds` globals to track time. 
     - This is the basis for creating time based effect.
 
@@ -126,25 +125,20 @@ Sets the frequency of an oscillator in Hz.
 freq(440, 1)
 ```
 
-Range: `0.0 -> 22050.0`
+Range Float: `0.0 -> 22050.0`
 
 ### `note(note, oscillator_number)`
-Sets the frequency of an oscillator to a given note name.
+Sets the frequency of an oscillator to a given note name (string) or MIDI note value (number).
 
 ```lua
 -- Set the frequency of the first oscillator to A4
 note("A4", 1)
+-- Set the frequency of the second oscillator to A4 using midi notes
+note(69, 2)
 ```
 
-Range: `C0 -> C17`
-
-### `note_midi(midi_note_number, oscillator_number)`
-Sets the frequency of an oscillator to a given MIDI note number.
-
-```Lua
--- Set the frequency of the first oscillator to MIDI note 69 (A4)
-note_midi(69, 1)
-```
+Range String: `C0 -> C17`
+Range Integer: `0 -> 127`
 
 ### `detune(cents, oscillator_number)`
 Sets the detune of an oscillator as a factor of the frequency.
@@ -153,6 +147,8 @@ Sets the detune of an oscillator as a factor of the frequency.
 -- Detune the first oscillator by 50%
 detune(0.5, 1)
 ```
+
+Range Float: `-infinity -> infinity`
 
 ### `amp(amplitude, oscillator_number)`
 Sets the amplitude of an oscillator.
@@ -164,7 +160,7 @@ This is independent of the master volume and amplitude envelopes.
 amp(0.5, 1)
 ```
 
-Range: `0.0 -> 1.0`
+Range Float: `0.0 -> 1.0`
 
 ### `env(attack, sustain, release, oscillator_number)`
 Sets the attack, sustain and release of an oscillator for use in an amplitude envelope.
@@ -194,6 +190,8 @@ if tick % 256 == 1 then
 end
 ```
 
+Range Float: `0.0 -> infinity`
+
 ### `wave(waveform_number, oscillator_number)`
 Sets the waveform of an oscillator.
 ```
@@ -208,6 +206,8 @@ Sets the waveform of an oscillator.
 wave(2, 1)
 ```
 
+Range Integer: `0 -> 5`
+
 ### `pan(pan, oscillator_number)`
 Sets the pan of an oscillator.
 
@@ -217,6 +217,8 @@ A value of -1 is full left, 0 is center, and 1 is full right.
 -- Set the pan of the first oscillator to full left
 pan(-1, 1)
 ```
+
+Range Float: `-1.0 -> 1.0`
 
 ### `solo(oscillator_number)`
 Sets an oscillator to solo mode. Only the soloed oscillator will be heard.
@@ -236,6 +238,9 @@ Sets the lowpass filter of an oscillator.
 lowpass(1000, 0.5, 1)
 ```
 
+Cutoff Range Float: `0.0 -> 22050.0`
+Resonance Range Float: `0.0 -> infinity`
+
 ### `highpass(cutoff, resonance, oscillator_number)`
 Sets the highpass filter of an oscillator.
 
@@ -243,6 +248,9 @@ Sets the highpass filter of an oscillator.
 -- Set the highpass filter of the first oscillator_number
 highpass(1000, 0.5, 1)
 ```
+
+Cutoff Range Float: `0.0 -> 22050.0`
+Resonance Range Float: `0.0 -> infinity`
 
 ### `speed(speed)`
 Sets the speed of the script in ticks per second.
@@ -258,6 +266,8 @@ The Lua script is run once per tick. Lowering the tick speed also means that the
 speed(0.5)
 ```
 
+Range Float: `0.0 -> 1.0`
+
 ### `bus_lowpass(cutoff, resonance)`
 Sets the lowpass filter of the master bus.
 
@@ -265,6 +275,9 @@ Sets the lowpass filter of the master bus.
 -- Set the lowpass filter of the master bus
 bus_lowpass(1000, 0.5)
 ```
+
+Cutoff Range Float: `0.0 -> 22050.0`
+Resonance Range Float: `0.0 -> infinity`
 
 ### Examples
 See the `scripts` directory for examples.
