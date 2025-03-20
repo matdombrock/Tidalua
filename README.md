@@ -125,7 +125,7 @@ Sets the frequency of an oscillator in Hz.
 freq(440, 1)
 ```
 
-Range Float: `0.0 -> 22050.0`
+*Range Float: `0.0 -> 22050.0`*
 
 ### `note(note, oscillator_number)`
 Sets the frequency of an oscillator to a given note name (string) or MIDI note value (number).
@@ -137,8 +137,9 @@ note("A4", 1)
 note(69, 2)
 ```
 
-Range String: `C0 -> C17`
-Range Integer: `0 -> 127`
+*Range String: `C0 -> C17`*
+
+*Range Integer: `0 -> 127`*
 
 ### `detune(cents, oscillator_number)`
 Sets the detune of an oscillator as a factor of the frequency.
@@ -148,7 +149,7 @@ Sets the detune of an oscillator as a factor of the frequency.
 detune(0.5, 1)
 ```
 
-Range Float: `-infinity -> infinity`
+*Range Float: `-infinity -> infinity`*
 
 ### `amp(amplitude, oscillator_number)`
 Sets the amplitude of an oscillator.
@@ -160,24 +161,17 @@ This is independent of the master volume and amplitude envelopes.
 amp(0.5, 1)
 ```
 
-Range Float: `0.0 -> 1.0`
+*Range Float: `0.0 -> 1.0`*
 
 ### `env(attack, sustain, release, oscillator_number)`
-Sets the attack, sustain and release of an oscillator for use in an amplitude envelope.
+Sets the attack, sustain and release (measured in ticks) of an oscillator for use in an amplitude envelope.
 
-Measured in ticks.
-
-The amplitude envelope is applied as a factor of the amplitude set with `amp()`.
-
-By default, an oscillator does not use an amplitude envelope at all.
-
-The amplitude envelope will be applied to the oscillator only after it's been enabled by the `env` function.
-
-For an amplitude envelope to work, the note must be triggered only once then allowed to play out.
-
-The envelope position is reset every time the note is triggered.
-
-This means that we need to make sure the total length of the envelope is less than the total length of the note.
+- The amplitude envelope is applied as a factor of the amplitude set with `amp()`.
+- By default, an oscillator does not use an amplitude envelope at all.
+- The amplitude envelope will be applied to the oscillator only after it's been enabled by the `env` function.
+- For an amplitude envelope to work, the note must be triggered only once then allowed to play out.
+- The envelope position is reset every time the note is triggered.
+	- We need to make sure the total length of the envelope is less than the total length of the note.
 
 ```lua
 wave(3, 1)
@@ -190,7 +184,7 @@ if tick % 256 == 1 then
 end
 ```
 
-Range Float: `0.0 -> infinity`
+*Range Float: `0.0 -> infinity`*
 
 ### `wave(waveform_number, oscillator_number)`
 Sets the waveform of an oscillator.
@@ -206,7 +200,7 @@ Sets the waveform of an oscillator.
 wave(2, 1)
 ```
 
-Range Integer: `0 -> 5`
+*Range Integer: `0 -> 5`*
 
 ### `pan(pan, oscillator_number)`
 Sets the pan of an oscillator.
@@ -218,7 +212,7 @@ A value of -1 is full left, 0 is center, and 1 is full right.
 pan(-1, 1)
 ```
 
-Range Float: `-1.0 -> 1.0`
+*Range Float: `-1.0 -> 1.0`*
 
 ### `solo(oscillator_number)`
 Sets an oscillator to solo mode. Only the soloed oscillator will be heard.
@@ -238,8 +232,9 @@ Sets the lowpass filter of an oscillator.
 lowpass(1000, 0.5, 1)
 ```
 
-Cutoff Range Float: `0.0 -> 22050.0`
-Resonance Range Float: `0.0 -> infinity`
+*Cutoff Range Float: `0.0 -> 22050.0`*
+
+*Resonance Range Float: `0.0 -> infinity`*
 
 ### `highpass(cutoff, resonance, oscillator_number)`
 Sets the highpass filter of an oscillator.
@@ -249,24 +244,26 @@ Sets the highpass filter of an oscillator.
 highpass(1000, 0.5, 1)
 ```
 
-Cutoff Range Float: `0.0 -> 22050.0`
-Resonance Range Float: `0.0 -> infinity`
+*Cutoff Range Float: `0.0 -> 22050.0`*
+
+*Resonance Range Float: `0.0 -> infinity`*
 
 ### `speed(speed)`
 Sets the speed of the script in ticks per second.
 
 For example setting the tick speed to `0.5` would result in 64 ticks per second.
 
-It is not possible to increase the tick speed. However, 128 ticks per second is very fast (nearly audio rate).
-
-The Lua script is run once per tick. Lowering the tick speed also means that the Lua script will be run less frequently.
+- It is not possible to increase the tick speed. 
+	- However, 128 ticks per second is very fast (nearly audio rate).
+- The Lua script is run once per tick. 
+	- Lowering the tick speed also means that the Lua script will be run less frequently.
 
 ```lua
 -- Set the tick speed to 0.5
 speed(0.5)
 ```
 
-Range Float: `0.0 -> 1.0`
+*Range Float: `0.0 -> 1.0`*
 
 ### `bus_lowpass(cutoff, resonance)`
 Sets the lowpass filter of the master bus.
@@ -276,8 +273,9 @@ Sets the lowpass filter of the master bus.
 bus_lowpass(1000, 0.5)
 ```
 
-Cutoff Range Float: `0.0 -> 22050.0`
-Resonance Range Float: `0.0 -> infinity`
+*Cutoff Range Float: `0.0 -> 22050.0`*
+
+*Resonance Range Float: `0.0 -> infinity`*
 
 ### Examples
 See the `scripts` directory for examples.
