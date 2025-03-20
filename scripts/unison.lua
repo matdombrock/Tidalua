@@ -13,7 +13,7 @@ local function unison(note_num, detune_amt, start_osc, end_osc)
   local osc_count = end_osc - start_osc + 1
   local detune_each = detune_amt / osc_count
   for i = 1, osc_count do
-    note_midi(note_num, i)
+    note(note_num, i)
     detune(detune_each * i, i)
   end
 end

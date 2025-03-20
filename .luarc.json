@@ -4,7 +4,6 @@
 	"disable",
         "freq",
 	"note",
-	"note_midi",
 	"detune",
 	"amp",
 	"wave",
