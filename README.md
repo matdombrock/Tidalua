@@ -1,4 +1,4 @@
-# 🌊 Wavescript 🌊
+# 🌘🌊 Tidalua 🌊🌒
 An experimental synthesizer that uses Lua scripts to generate sound in a "live coding" environment.
 
 What is it?
@@ -57,11 +57,11 @@ The binary and scripts will be placed in the `./out` directory.
 
 # Running
 ```bash
-./wavescript <script_path>.lua [ v | d ]
+./tidalua <script_path>.lua [ v | d ]
 ```
 Example:
 ```bash
-./wavescript ./scripts/example1.lua
+./tidalua ./scripts/example1.lua
 ```
 
 - `v` - Visualizer mode (very experimental and slow)
