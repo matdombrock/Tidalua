@@ -6,6 +6,7 @@
 #include "config.h"
 #include "util.h"
 #include "synth.h"
+#include "vis.h"
 
 
 static int pa_callback(const void *input_buffer, void *output_buffer,
@@ -76,7 +77,8 @@ int pa_init() {
 /____  > \\___  >|__|   |__||   __/ |__|   \r\n\
      \\/      \\/            |__|           \r\n\
 ";
-  printf("%s\n", logo);
+  /*printf("%s\n", logo);*/
+  vis_loop();
   printf("Press ENTER to stop the audio...\n");
   // Wait for ENTER
   getchar();

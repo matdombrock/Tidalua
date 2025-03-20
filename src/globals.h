@@ -6,20 +6,24 @@ typedef struct {
     char *filepath;
     int sample_num;
     int tick_num;
+    float seconds;
     int output_mode;
-    float sample_acc[VIS_BUF_SIZE];
     int sample_acc_i;
     float speed;
+    char keypress;
+    float memory[16];
 } System;
 
 System _sys = {
     .filepath = "empty",
     .sample_num = 0,
     .tick_num = 0,
+    .seconds = 0.0f,
     .output_mode = 0,
-    .sample_acc = {0},
     .sample_acc_i = 0,
     .speed = 1.0f,
+    .keypress = -1,
+    .memory = {0.0f},
 };
 
 // Synth state

@@ -169,6 +169,42 @@ int luaB_bus_lowpass(lua_State *L) {
     debug("lua: bus_lowpass(%f, %f)\n", cutoff, resonance);
     return 0;
 }
+int luaB_mem_set(lua_State *L) {
+    float val = luaL_checknumber(L, 1);
+    int index = luaL_optinteger(L, 2, 1);
+    index -= LUA_INDEX;
+    _sys.memory[index] = val;
+    debug("lua: mem_set(%d, %f)\n", index, val);
+    return 0;
+}
+int luaB_mem_get(lua_State *L) {
+    int index = luaL_checkinteger(L, 1);
+    index -= LUA_INDEX;
+    if (floor(_sys.memory[index]) == _sys.memory[index]) {
+        lua_pushinteger(L, _sys.memory[index]);
+        debug("lua: mem_get(%d)\n", index);
+        return 1;
+    }
+    float val = _sys.memory[index];
+    lua_pushnumber(L, val);
+    debug("lua: mem_get(%d)\n", index);
+    return 1;
+    /*printf("index: %d\n", index);*/
+    /*if (index < 0 || index >= 16) {*/
+    /*    printf("lua warn: memory index out of bounds\n");*/
+    /*    return 0;*/
+    /*}*/
+    /*// Check if the number is an integer*/
+    /*if (floor(_sys.memory[index]) == _sys.memory[index]) {*/
+    /*    lua_pushinteger(L, _sys.memory[index]);*/
+    /*    debug("lua: mem_get(%d)\n", index);*/
+    /*    return 1;*/
+    /*} */
+    /*float val = _sys.memory[index];*/
+    /*lua_pushnumber(L, val);*/
+    /*debug("lua: mem_get(%d)\n", index);*/
+    /*return 1;*/
+}
 void luaB_binds(lua_State *L) {
     lua_register(L, "dbg", luaB_debug);  // Using dbg which is shorter and not a reserved name
     lua_register(L, "enable", luaB_enable);
@@ -185,10 +221,11 @@ void luaB_binds(lua_State *L) {
     lua_register(L, "highpass", luaB_highpass);
     lua_register(L, "speed", luaB_speed);
     lua_register(L, "bus_lowpass", luaB_bus_lowpass);
+    lua_register(L, "mem_set", luaB_mem_set);
+    lua_register(L, "mem_get", luaB_mem_get);
 }
 
 void luaB_run() { 
-
     float seconds = (float)_sys.sample_num / (float)SAMPLE_RATE;
     int tick = floor(seconds * _sys.speed * 128);
     if (tick <= _sys.tick_num) return;
@@ -215,6 +252,8 @@ void luaB_run() {
     lua_setglobal(L, "seconds");
     lua_pushnumber(L, tick);
     lua_setglobal(L, "tick");
+    lua_pushstring(L, &_sys.keypress);
+    lua_setglobal(L, "keypress");
 
     if (luaL_dofile(L, _sys.filepath) != LUA_OK) {
         fprintf(stderr, "Lua error: %s\n", lua_tostring(L, -1));

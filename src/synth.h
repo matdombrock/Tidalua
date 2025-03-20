@@ -2,7 +2,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include "luaBinds.h"
-#include "vis.h"
 #include "globals.h"
 
 // Represents the internal state of the oscillator
@@ -19,7 +18,7 @@ void synth_init() {
             .amp = 1.0f,
             .pan = 0.0f,
             .ar = {0.1f, 0.1f, 0.1f},
-            .ar_pos = 0.0f,
+            .ar_pos = 9999.0f,
             .ar_enabled = 0,
             .lp_cutoff = 20000.0f,
             .lp_resonance = 1.0f,
@@ -52,13 +51,6 @@ float synth_get_ar(int osc) {
     else { // Release
         ar = 1.0f - (pos - attack_t - sustain_t) / release_t;
     }
-    /*if (pos > attack_t ) {// Release*/
-    /*    ar = 1 - (( pos - attack_t ) / release_t);*/
-    /*}*/
-    /**/
-    /*else { // Attack*/
-    /*    ar = pos / attack_t;*/
-    /*}*/
 
     _synth[osc].ar_pos += (1.0f / SAMPLE_RATE) * _sys.speed;
     if (_synth[osc].ar_pos > (attack_t + release_t + sustain_t)) {
@@ -183,8 +175,6 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             }
         }
         //
-        vis_collect_sample(i, mixL);
-        vis_render();
         _sys.sample_num++;
     }
 }
