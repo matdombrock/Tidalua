@@ -78,7 +78,7 @@ int pa_init() {
      \\/      \\/            |__|           \r\n\
 ";
   /*printf("%s\n", logo);*/
-  vis_loop();
+  /*vis_loop();*/
   printf("Press ENTER to stop the audio...\n");
   // Wait for ENTER
   getchar();
