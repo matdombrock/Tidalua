@@ -32,9 +32,9 @@ typedef struct {
     float detune;
     float amp;
     float pan;
-    float ar[3];
-    float ar_pos;
-    int ar_enabled;
+    float env[3];
+    float env_pos;
+    int env_enabled;
     float lp_cutoff;
     float lp_resonance;
     int lp_enabled;

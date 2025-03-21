@@ -47,7 +47,7 @@ int luaB_freq(lua_State *L) {
     float val = luaL_checknumber(L, 1);
     int target = luaB_get_target(L, 2); 
     _synth[target].freq = val;
-    _synth[target].ar_pos = 0;
+    _synth[target].env_pos = 0;
     debug("lua: freq(%f, %d)\n", val, target);
     return 0;
 }
@@ -59,7 +59,7 @@ int luaB_note(lua_State *L) {
         for (int i = 0; i < sizeof(notes) / sizeof(Note); i++) {
             if (strcmp(notes[i].name, note) == 0) {
                 _synth[target].freq = notes[i].freq;
-                _synth[target].ar_pos = 0;
+                _synth[target].env_pos = 0;
                 debug("lua: note: %s, freq: %f, target: %d\n", note, notes[i].freq, target);
                 return 0;
             }
@@ -69,7 +69,7 @@ int luaB_note(lua_State *L) {
         int note = luaL_checkinteger(L, 1);
         float freq = 440.0f * powf(2.0f, (note - 69) / 12.0f);
         _synth[target].freq = freq;
-        _synth[target].ar_pos = 0;
+        _synth[target].env_pos = 0;
         debug("lua: note: %d, freq: %f, target: %d\n", note, freq, target);
         return 0;
     }
@@ -120,10 +120,10 @@ int luaB_env(lua_State *L) {
     float sustain = luaL_checknumber(L, 2) / 128.0f;
     float release = luaL_checknumber(L, 3) / 128.0f;
     int target = luaB_get_target(L, 4);
-    _synth[target].ar[0] = attack;
-    _synth[target].ar[1] = sustain;
-    _synth[target].ar[2] = release;
-    _synth[target].ar_enabled = 1;
+    _synth[target].env[0] = attack;
+    _synth[target].env[1] = sustain;
+    _synth[target].env[2] = release;
+    _synth[target].env_enabled = 1;
     debug("lua: env(%f, %f, %f, %d)\n", attack, sustain, release, target);
     return 0;
 }
