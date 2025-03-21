@@ -266,7 +266,7 @@ speed(0.5)
 *Range Float: `0.0 -> 1.0`*
 
 ### `mem_set(value, mem_index)`
-Sets a value in the memory array at the given index.
+Sets a value in the memory array at the given index. The Lua state is reset each tick. This is allows for storing values that can be accessed by susequent runs of the script.
 
 - Values may only be numbers (int or float).
 - There are 16 memory locations
@@ -301,7 +301,7 @@ Sets the lowpass filter of the master bus.
 bus_lowpass(1000, 0.5)
 ```
 
-*Cutoff Range Float: `0.0 -> 22050.0`*
+*Cutoff Range Float: `0.0 -> 22050.0` (half of the sample rate)*
 
 *Resonance Range Float: `0.0 -> infinity`*
 

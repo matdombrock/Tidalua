@@ -1,3 +1,5 @@
+-- This script requires the "vis" feature to be enabled which is still a WIP
+
 enable(2)
 detune(0.5, 1)
 
