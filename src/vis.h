@@ -29,12 +29,11 @@ void vis_render(int vtick) {
 
 // Configure terminal for non-blocking input
 void vis_nonblocking() {
-// Check if we are on apple
+    // This causes wierd issues on macOS
+    // Isues with colors and wide characters
+    // Check if we are on apple
 #ifdef __APPLE__
-    // On macOS, we need to set the terminal to raw mode
-    // This is done by using the `stty` command
-    system("stty -raw");
-    /*return;*/
+    return;
 #endif
     struct termios oldt, newt;
     tcgetattr(STDIN_FILENO, &oldt);

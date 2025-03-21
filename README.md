@@ -57,7 +57,7 @@ The binary and scripts will be placed in the `./out` directory.
 
 # Running
 ```bash
-./tidalua <script_path>.lua d 
+./tidalua <script_path>.lua [ d | v ] 
 ```
 Example:
 ```bash
@@ -65,6 +65,7 @@ Example:
 ```
 
 - `d` - Debug mode
+- `v` - Visual mode (experimental and not fully functional)
 
 # Scripting
 - Oscillator numbers start at 1.
