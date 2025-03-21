@@ -1,54 +1,64 @@
-#pragma once
+#include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
-#include <string.h>
-
-#include "config.h"
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include "globals.h"
+#include "util.h"
+#define VIS_WIDTH 24
+#define VIS_HEIGHT 16
 
-void vis_collect_sample(int index, float mix) {
-    if (_sys.output_mode != 2) return;
-    if (index % VIS_DOWNSAMPLE == 0) {
-        _sys.sample_acc[_sys.sample_acc_i] = mix;
-        _sys.sample_acc_i++;
-    }
+void vis_clear() {
+    printf("\033[2J");
+    // Clear the console
+    system("clear");
 }
 
-void vis_render() {
-    if (_sys.output_mode != 2) return;
-    if (_sys.sample_acc_i >= VIS_BUF_SIZE) {
-        _sys.sample_acc_i = 0;
-        // For each sample in the buffer
-        for (int i = 0; i < VIS_BUF_SIZE; i++) {
-            float norm = _sys.sample_acc[i];
-            norm /= 2;
-            norm += 0.5;
-            int pos = floor(norm * VIS_WIDTH);
-            // Should we stretch the visualizer? and repeat downsampled samples?
-            int stretch = VIS_STRETCH ? VIS_DOWNSAMPLE : 1;
-            // For each stretch
-            for (int ii = 0; ii < stretch; ii++) {
-                char line[VIS_WIDTH * 8] = ""; // Support wide characters
-                // For each pixel in the visualizer
-                for (int iii = 0; iii < VIS_WIDTH; iii++) {
-                    if (iii == pos) {
-                        /*printf(" ");*/
-                        strcat(line, " ");
-                    }
-                    else if (iii > (VIS_WIDTH / 2)) {
-                        /*printf("░");*/
-                        strcat(line, "░");
-                    }
-                    else {
-                        /*printf("▒");*/
-                        strcat(line, "▒");
-
-                    }
-                }
-                printf("%s", line);
-                printf("| %f", _sys.sample_acc[i]);
-                printf("\n");
+void vis_render(int vtick) {
+    for (int y = 0; y < VIS_HEIGHT; y++) {
+        for (int x = 0; x < VIS_WIDTH; x++) {
+            int pos = vtick % (VIS_WIDTH * VIS_HEIGHT);
+            if (pos == (y * VIS_WIDTH + x)) {
+                printc(COLOR_RED, "▓▓");
+            } else {
+                printc(COLOR_YELLOW, "░░");
             }
+        }         
+        printf("\n");
+    } 
+}
+
+void vis_loop() {
+    int run = 1;
+    int vtick = 0;
+    // Configure terminal for non-blocking input
+    struct termios oldt, newt;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    // Set non-blocking mode for stdin
+    int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+
+    while (run) {
+        vis_clear();
+        printf("🌘🌊 Tidalua 🌊🌒\n");
+        vis_render(vtick);
+        // Exit if the user presses 'Enter'
+        int ch = getchar();
+        if (ch != -1) _sys.keypress = ch;
+        if (ch == '\n') {
+            run = 0;
         }
+        printf("🌊 %.2f | %d | %d | %c\n", _sys.speed, _sys.tick_num, vtick, _sys.keypress);
+        printf("🌘 %s\n", _sys.filepath);
+        vtick++;
+        usleep(22 * 1000); // Sleep for 100 milliseconds to reduce CPU usage
     }
+    // Restore terminal settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    // Restore blocking mode for stdin
+    fcntl(STDIN_FILENO, F_SETFL, flags);
 }

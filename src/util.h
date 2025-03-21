@@ -3,6 +3,23 @@
 #include <stdarg.h>
 #include "globals.h"
 
+enum {
+    COLOR_BLACK = 30,
+    COLOR_RED,
+    COLOR_GREEN,
+    COLOR_YELLOW,
+    COLOR_BLUE,
+    COLOR_MAGENTA,
+    COLOR_CYAN,
+    COLOR_WHITE
+};
+
+void printc(int color, const char *str) {
+    printf("\033[0;%dm", color);
+    printf("%s", str);
+    printf("\033[0m");
+}
+
 void debug(const char *format, ...) {
     if (_sys.output_mode != 1) return;
     va_list args;

@@ -2,7 +2,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include "luaBinds.h"
-#include "vis.h"
 #include "globals.h"
 
 // Represents the internal state of the oscillator
@@ -18,9 +17,9 @@ void synth_init() {
             .detune = 0.0f,
             .amp = 1.0f,
             .pan = 0.0f,
-            .ar = {0.1f, 0.1f, 0.1f},
-            .ar_pos = 0.0f,
-            .ar_enabled = 0,
+            .env = {0.1f, 0.1f, 0.1f},
+            .env_pos = 9999.0f,
+            .env_enabled = 0,
             .lp_cutoff = 20000.0f,
             .lp_resonance = 1.0f,
             .lp_enabled = 0,
@@ -38,10 +37,10 @@ void synth_init() {
 
 float synth_get_ar(int osc) {
     float ar = 0.0f;
-    float pos = _synth[osc].ar_pos;
-    float attack_t = _synth[osc].ar[0];
-    float sustain_t = _synth[osc].ar[1];
-    float release_t = _synth[osc].ar[2];
+    float pos = _synth[osc].env_pos;
+    float attack_t = _synth[osc].env[0];
+    float sustain_t = _synth[osc].env[1];
+    float release_t = _synth[osc].env[2];
     
     if (pos < attack_t) { // Attack
         ar = pos / attack_t;
@@ -52,17 +51,10 @@ float synth_get_ar(int osc) {
     else { // Release
         ar = 1.0f - (pos - attack_t - sustain_t) / release_t;
     }
-    /*if (pos > attack_t ) {// Release*/
-    /*    ar = 1 - (( pos - attack_t ) / release_t);*/
-    /*}*/
-    /**/
-    /*else { // Attack*/
-    /*    ar = pos / attack_t;*/
-    /*}*/
 
-    _synth[osc].ar_pos += (1.0f / SAMPLE_RATE) * _sys.speed;
-    if (_synth[osc].ar_pos > (attack_t + release_t + sustain_t)) {
-        _synth[osc].ar_pos = attack_t + release_t + sustain_t;
+    _synth[osc].env_pos += (1.0f / SAMPLE_RATE) * _sys.speed;
+    if (_synth[osc].env_pos > (attack_t + release_t + sustain_t)) {
+        _synth[osc].env_pos = attack_t + release_t + sustain_t;
     }
     return ar;
 }
@@ -83,7 +75,7 @@ float synth_get_sample(float phase, int osc) {
             sample = 2.0f * (phase / (2.0f * M_PI)) - 1.0f;
             break;
         case 4: // Triangle
-            sample = 2.0f * fabsf(2.0f * (phase / (2.0f * M_PI)) - 1.0f) - 1.0f;
+            sample = 2.0f * fabs(2.0f * (phase / (2.0f * M_PI)) - 1.0f) - 1.0f;
             break;
         case 5: // Noise
             sample = 2.0f * ((float)rand() / (float)RAND_MAX) - 1.0f;
@@ -92,7 +84,7 @@ float synth_get_sample(float phase, int osc) {
             sample = 0;
             break;
     }
-    if (_synth[osc].ar_enabled) sample *= synth_get_ar(osc);
+    if (_synth[osc].env_enabled) sample *= synth_get_ar(osc);
     return sample;
 }
 
@@ -183,8 +175,6 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             }
         }
         //
-        vis_collect_sample(i, mixL);
-        vis_render();
         _sys.sample_num++;
     }
 }

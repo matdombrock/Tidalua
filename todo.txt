@@ -6,11 +6,9 @@ Limiter
 
 Master volume
 
-tick_speed -> speed
-atk_rel -> env | ampe
-note_midi -> notem
-
 examples with import
+
+check if the lua file has changed before reloading (only works for single files)
 
 wavelab
 tidalang

@@ -78,6 +78,8 @@ Example:
 - Lua scripts are run in full before the any samples are generated
     - This means whatever the last state the script leaves the synth in is what will be heard.
 - Scripts are run periodically as the synth is running (once per tick).
+- The lua environment is reset every time the script is run.
+	- This means that any variables set in the script will be lost.
 - Scripts will "hot reload" as the synth is running. Providing a "live coding" environment.
 - Use the `tick` or `seconds` globals to track time. 
     - This is the basis for creating time based effect.
@@ -149,7 +151,7 @@ Sets the detune of an oscillator as a factor of the frequency.
 detune(0.5, 1)
 ```
 
-*Range Float: `-infinity -> infinity`*
+*Range Float: `0.0 -> infinity`*
 
 ### `amp(amplitude, oscillator_number)`
 Sets the amplitude of an oscillator.
@@ -174,7 +176,6 @@ Sets the attack, sustain and release (measured in ticks) of an oscillator for us
 	- We need to make sure the total length of the envelope is less than the total length of the note.
 
 ```lua
-wave(3, 1)
 -- Set the attack, sustain and release of the first oscillator to 8, 64, 128 ticks
 env(8, 64, 128, 1)
 -- The total length of this envelope is 200 ticks
@@ -249,9 +250,9 @@ highpass(1000, 0.5, 1)
 *Resonance Range Float: `0.0 -> infinity`*
 
 ### `speed(speed)`
-Sets the speed of the script in ticks per second.
+Sets the tick rate for the script.
 
-For example setting the tick speed to `0.5` would result in 64 ticks per second.
+For example setting the tick rate to `0.5` would result in 64 ticks per second instead of 128.
 
 - It is not possible to increase the tick speed. 
 	- However, 128 ticks per second is very fast (nearly audio rate).
