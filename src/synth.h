@@ -75,7 +75,7 @@ float synth_get_sample(float phase, int osc) {
             sample = 2.0f * (phase / (2.0f * M_PI)) - 1.0f;
             break;
         case 4: // Triangle
-            sample = 2.0f * fabsf(2.0f * (phase / (2.0f * M_PI)) - 1.0f) - 1.0f;
+            sample = 2.0f * fabs(2.0f * (phase / (2.0f * M_PI)) - 1.0f) - 1.0f;
             break;
         case 5: // Noise
             sample = 2.0f * ((float)rand() / (float)RAND_MAX) - 1.0f;
