@@ -20,7 +20,6 @@ System _sys = {
     .tick_num = 0,
     .seconds = 0.0f,
     .output_mode = 0,
-    .sample_acc_i = 0,
     .speed = 1.0f,
     .keypress = -1,
     .memory = {0.0f},
@@ -48,10 +47,12 @@ typedef struct {
 Synth _synth[OSC_COUNT]; // Initialized in synth.h
 
 typedef struct {
+    float amp;
     float lp_cutoff;
     float lp_resonance;
 } Bus;
 Bus _bus = {
+    .amp = 1.0f,
     .lp_cutoff = 20000.0f,
     .lp_resonance = 1.0f,
 };

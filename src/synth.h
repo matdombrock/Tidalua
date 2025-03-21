@@ -35,28 +35,28 @@ void synth_init() {
     _synth[0].enabled = 1;
 }
 
-float synth_get_ar(int osc) {
-    float ar = 0.0f;
+float synth_get_env(int osc) {
+    float env = 0.0f;
     float pos = _synth[osc].env_pos;
     float attack_t = _synth[osc].env[0];
     float sustain_t = _synth[osc].env[1];
     float release_t = _synth[osc].env[2];
     
     if (pos < attack_t) { // Attack
-        ar = pos / attack_t;
+        env = pos / attack_t;
     } 
     else if (pos < (attack_t + sustain_t)) { // Sustain
-        ar = 1.0f;
+        env = 1.0f;
     } 
     else { // Release
-        ar = 1.0f - (pos - attack_t - sustain_t) / release_t;
+        env = 1.0f - (pos - attack_t - sustain_t) / release_t;
     }
 
     _synth[osc].env_pos += (1.0f / SAMPLE_RATE) * _sys.speed;
     if (_synth[osc].env_pos > (attack_t + release_t + sustain_t)) {
         _synth[osc].env_pos = attack_t + release_t + sustain_t;
     }
-    return ar;
+    return env;
 }
 float synth_get_sample(float phase, int osc) {
     int mode = _synth[osc].wave % 6; // Wrap wave mode
@@ -84,7 +84,7 @@ float synth_get_sample(float phase, int osc) {
             sample = 0;
             break;
     }
-    if (_synth[osc].env_enabled) sample *= synth_get_ar(osc);
+    if (_synth[osc].env_enabled) sample *= synth_get_env(osc);
     return sample;
 }
 
@@ -111,6 +111,7 @@ float synth_lowpass(int index, float input, float cutoff, float dt) {
 }
 
 // Implements an Infinite Impulse Response (IIR) highpass filter
+// TODO: Can these be static?
 float _synth_highpass_buf_in[2 + OSC_COUNT] = {0};
 float _synth_highpass_buf_out[2 + OSC_COUNT] = {0};
 float synth_highpass(int index, float input, float cutoff, float dt) {
@@ -163,6 +164,9 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
         // Bus lowpass filter
         mixL = synth_lowpass(0, mixL, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
         mixR = synth_lowpass(1, mixR, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
+        // Bus AMPLITUDE
+        mixL *= _bus.amp;
+        mixR *= _bus.amp;
         /**out++ = mix;*/
         out[i * 2] = mixL; // Left
         out[i * 2 + 1] = mixR; // Right

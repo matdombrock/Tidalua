@@ -61,7 +61,7 @@ The binary and scripts will be placed in the `./out` directory.
 ```
 Example:
 ```bash
-./tidalua ./scripts/example1.lua
+./tidalua scripts/lfo.lua
 ```
 
 - `d` - Debug mode
@@ -229,7 +229,7 @@ solo(1)
 Sets the lowpass filter of an oscillator.
 
 ```lua
--- Set the lowpass filter of the first oscillator_number
+-- Set the lowpass filter of the first oscillator
 lowpass(1000, 0.5, 1)
 ```
 
@@ -241,7 +241,7 @@ lowpass(1000, 0.5, 1)
 Sets the highpass filter of an oscillator.
 
 ```lua
--- Set the highpass filter of the first oscillator_number
+-- Set the highpass filter of the first oscillator
 highpass(1000, 0.5, 1)
 ```
 
@@ -253,6 +253,8 @@ highpass(1000, 0.5, 1)
 Sets the tick rate for the script.
 
 For example setting the tick rate to `0.5` would result in 64 ticks per second instead of 128.
+
+We can think of the default speed (1.0) as being 120 BPM (beats per minute). 120 BPM means 2 beats per second. So a single beat is 0.5 seconds long or 64 ticks. 
 
 - It is not possible to increase the tick speed. 
 	- However, 128 ticks per second is very fast (nearly audio rate).
@@ -305,6 +307,15 @@ bus_lowpass(1000, 0.5)
 *Cutoff Range Float: `0.0 -> 22050.0` (half of the sample rate)*
 
 *Resonance Range Float: `0.0 -> infinity`*
+
+### `bus_amp(amplitude)`
+Sets the amplitude of the master bus.
+```lua
+-- Set the amplitude of the master bus to 0.5
+bus_amp(0.5)
+```
+
+*Range Float: `0.0 -> 1.0`*
 
 ### Examples
 See the `scripts` directory for examples.
