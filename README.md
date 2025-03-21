@@ -57,14 +57,13 @@ The binary and scripts will be placed in the `./out` directory.
 
 # Running
 ```bash
-./tidalua <script_path>.lua [ v | d ]
+./tidalua <script_path>.lua d 
 ```
 Example:
 ```bash
 ./tidalua ./scripts/example1.lua
 ```
 
-- `v` - Visualizer mode (very experimental and slow)
 - `d` - Debug mode
 
 # Scripting
@@ -265,6 +264,34 @@ speed(0.5)
 ```
 
 *Range Float: `0.0 -> 1.0`*
+
+### `mem_set(value, mem_index)`
+Sets a value in the memory array at the given index.
+
+- Values may only be numbers (int or float).
+- There are 16 memory locations
+    - Like all other indices, the first memory location is 1.
+- Everything is stored as a float behind the scenes. 
+- Lua does not really have a concept of integer vs float types.
+    - However this distiction can be important when dealing with array (table) indices.
+- So, if you supply an integer value to `mem_set()`, the `mem_get()` function will return an integer.
+
+```lua
+-- Set the value at index 0 to 1.0
+-- This is treated as an integer since it has no fractional part
+mem_set(1.0, 1)
+```
+
+*Range Float: `-infinity -> infinity`*
+
+### `mem_get(mem_index)`
+Gets a value from the memory array at the given index.
+- Values are returned as floats or integers depending on how they were set.
+- See `mem_set()` for more info.
+```lua
+-- Get the value at index 1
+local value = mem_get(1)
+```
 
 ### `bus_lowpass(cutoff, resonance)`
 Sets the lowpass filter of the master bus.
