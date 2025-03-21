@@ -20,6 +20,7 @@
 	"bus_lowpass",
 	"bus_highpass",
 	"bus_amp",
+	"bus_amp",
 	"mem_set",
 	"mem_get"
     ]
