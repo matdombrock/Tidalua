@@ -17,7 +17,7 @@ void synth_init() {
             .detune = 0.0f,
             .amp = 1.0f,
             .pan = 0.0f,
-            .ar = {0.1f, 0.1f, 0.1f},
+            .env = {0.1f, 0.1f, 0.1f},
             .env_pos = 9999.0f,
             .env_enabled = 0,
             .lp_cutoff = 20000.0f,
