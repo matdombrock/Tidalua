@@ -66,7 +66,10 @@ int pa_init() {
   // Clear the Console
   system("clear");
 
-  /*vis_loop();*/
+  if (_sys.output_mode == 2) {
+    // Start the visualizer loop
+    vis_loop();
+  }
   
   printf("Press ENTER to stop the audio...\n");
   // Wait for ENTER
