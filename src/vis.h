@@ -57,8 +57,12 @@ void vis_blocking() {
     fcntl(STDIN_FILENO, F_SETFL, flags & ~O_NONBLOCK);
 }
 
+// Handle non-blocking input
 int vis_input() {
-    // Handle non-blocking input
+    // We dont have non-blocking input on macOS
+#ifdef __APPLE__
+    return 1; // Skip input handling on macOS
+#endif
     int ch = getchar();
     if (ch != -1) {
         _sys.keypress = ch;
@@ -78,11 +82,11 @@ void vis_loop() {
         vis_clear();
         printf("🌘🌊 Tidalua 🌊🌒\n");
         vis_render(vtick);
-        /*run = vis_input();*/
+        run = vis_input();
         printf("🌊 %.2f | %d | %d | %c\n", _sys.speed, _sys.tick_num, vtick, _sys.keypress);
         printf("🌘 %s\n", _sys.filepath);
         vtick++;
-        usleep(22 * 1000); // Sleep for 100 milliseconds to reduce CPU usage
+        usleep(22 * 1000); // Sleep to reduce CPU usage
     }
     // Restore terminal settings
     vis_blocking();
