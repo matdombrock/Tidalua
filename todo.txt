@@ -10,10 +10,3 @@ examples with import
 
 check if the lua file has changed before reloading (only works for single files)
 
-wavelab
-tidalang
-tidal128
-tidalua
-ember moon
-moonsynth
-

@@ -217,7 +217,6 @@ void vis_loop() {
     // Initialize non-blocking input
     vis_nonblocking();
     while (run) {
-        vis_init();
         vis_clear();
         printf("🌘🌊 Tidalua 🌊🌒\n");
         vis_prerender(vtick);
