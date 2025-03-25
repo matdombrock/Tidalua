@@ -147,8 +147,11 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             if (_synth[ii].hp_enabled) {
                 sample = synth_highpass(2 + ii, sample, _synth[ii].hp_cutoff, _synth[ii].hp_resonance / SAMPLE_RATE);
             }
+            sample *= _synth[ii].amp;
             samples[ii] = sample;
+            _vis.rms_buffer[ii][_vis.rms_index] = sample;
         }
+        _vis.rms_index++;
         float mixL = 0;
         float mixR = 0;
         for (int ii = 0; ii < OSC_COUNT; ii++) {
@@ -156,8 +159,8 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             float pan = _synth[ii].pan;
             float panL = 0.5f - 0.5f * pan;
             float panR = 0.5f + 0.5f * pan;
-            mixL += panL * _synth[ii].amp * samples[ii];
-            mixR += panR * _synth[ii].amp * samples[ii];
+            mixL += panL * samples[ii];
+            mixR += panR * samples[ii];
         }
         mixL = mixL / (float)enabled_count;
         mixR = mixR / (float)enabled_count;
@@ -180,6 +183,17 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
         }
         //
         _sys.sample_num++;
+    }
+    // Calculate RMS
+    if (_vis.rms_index >= RMS_WINDOW) {
+        for (int i = 0; i < OSC_COUNT; i++) {
+            float sum = 0.0f;
+            for (int j = 0; j < RMS_WINDOW; j++) {
+                sum += _vis.rms_buffer[i][j] * _vis.rms_buffer[i][j];
+            }
+            _vis.rms[i] = sqrtf(sum / RMS_WINDOW);
+        }
+        _vis.rms_index = 0;
     }
 }
 

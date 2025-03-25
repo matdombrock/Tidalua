@@ -1,4 +1,6 @@
 #pragma once
+#include <string.h>
+#include <stdlib.h>
 typedef struct {
     char name[32];
     float freq;
@@ -212,3 +214,25 @@ Note notes[] = {
     {"C17", 2143237.12},
 };
 
+Note note_by_name(const char *name) {
+    for (int i = 0; i < sizeof(notes) / sizeof(Note); i++) {
+        if (strcmp(notes[i].name, name) == 0) {
+            return notes[i];
+        }
+    }
+    return notes[0];
+}
+
+// A function that takes a frequency and returns the closest note
+Note note_by_freq(float freq) {
+    Note closest_note = notes[0];
+    float closest_diff = 1000000;
+    for (int i = 0; i < sizeof(notes) / sizeof(Note); i++) {
+        float diff = abs(notes[i].freq - freq);
+        if (diff < closest_diff) {
+            closest_diff = diff;
+            closest_note = notes[i];
+        }
+    }
+    return closest_note;
+}

@@ -11,6 +11,14 @@ wave(5, 4)
 wave(1, 5)
 wave(1, 6)
 
+local ampv = 5
+amp(ampv, 1)
+amp(ampv, 2)
+amp(ampv, 3)
+amp(ampv, 4)
+amp(ampv, 5)
+amp(ampv, 6)
+
 note("C6", 5)
 note("A5", 6)
 

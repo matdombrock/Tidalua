@@ -67,6 +67,7 @@ int pa_init() {
   system("clear");
 
   if (_sys.output_mode == 2) {
+    vis_init();
     // Start the visualizer loop
     vis_loop();
   }

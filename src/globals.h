@@ -56,3 +56,14 @@ Bus _bus = {
     .lp_cutoff = 20000.0f,
     .lp_resonance = 1.0f,
 };
+
+typedef struct {
+    float rms_buffer[OSC_COUNT][RMS_WINDOW];
+    int rms_index;
+    float rms[OSC_COUNT];
+} Vis;
+Vis _vis = {
+    .rms_buffer = {{0.0f}},
+    .rms_index = 0,
+    .rms = {0.0f},
+};

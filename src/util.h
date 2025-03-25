@@ -3,7 +3,9 @@
 #include <stdarg.h>
 #include "globals.h"
 
+// ANSI color codes
 enum {
+    COLOR_NONE = 0,
     COLOR_BLACK = 30,
     COLOR_RED,
     COLOR_GREEN,

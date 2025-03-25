@@ -56,14 +56,11 @@ int luaB_note(lua_State *L) {
 
     if (lua_type(L, 1) == LUA_TSTRING) {
         const char *note = luaL_checkstring(L, 1);
-        for (int i = 0; i < sizeof(notes) / sizeof(Note); i++) {
-            if (strcmp(notes[i].name, note) == 0) {
-                _synth[target].freq = notes[i].freq;
-                _synth[target].env_pos = 0;
-                debug("lua: note: %s, freq: %f, target: %d\n", note, notes[i].freq, target);
-                return 0;
-            }
-        }
+        Note n = note_by_name(note);
+        _synth[target].freq = n.freq;
+        _synth[target].env_pos = 0;
+        debug("lua: note: %s, freq: %f, target: %d\n", note, n.freq, target);
+        return 0;
     } 
     else if (lua_type(L, 1) == LUA_TNUMBER) {
         int note = luaL_checkinteger(L, 1);
@@ -87,6 +84,7 @@ int luaB_detune(lua_State *L) {
 int luaB_amp(lua_State *L) {
     float val = luaL_checknumber(L, 1);
     int target = luaB_get_target(L, 2);
+    val = val < 0 ? 0 : val; 
     _synth[target].amp = val;
     debug("lua: amp(%f, %d)\n", val, target);
     return 0;
