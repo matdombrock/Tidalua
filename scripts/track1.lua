@@ -69,7 +69,7 @@ chords[12] = function()
 end
 
 local chords_pos = math.floor(seconds % #chords) + 1
-print("chords_pos: " .. chords_pos)
+dbg("chords_pos: " .. chords_pos)
 chords[chords_pos]()
 
 
@@ -117,7 +117,7 @@ detune(math.sin(seconds * 32) * 0.025, 4)
 if lead_pos > 12 and chords_pos > 8 then
   detune(math.sin(seconds * 32) * (math.sin(seconds / 32)), 4)
 end
-print("lead_pos: " .. lead_pos)
+dbg("lead_pos: " .. lead_pos)
 lead[lead_pos]()
 
 enable(5)
@@ -142,7 +142,7 @@ perc[4] = function()
 end
 if chords_pos > 8 and seconds % 16 > 8 then
   local perc_pos = math.floor((seconds * 16) % #perc) + 1
-  print("perc_pos: " .. perc_pos)
+  dbg("perc_pos: " .. perc_pos)
   perc[perc_pos]()
 elseif seconds % 16 > 8 then
   amp(0, 5)

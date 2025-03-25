@@ -59,10 +59,6 @@ void vis_prerender(int vtick) {
     vis_frame_set(0, VIS_HEIGHT - 1, corner, COLOR_YELLOW);
     vis_frame_set(VIS_WIDTH - 1, VIS_HEIGHT - 1, corner, COLOR_YELLOW);
 
-    //
-    /*wchar_t title[2] = {L'O', L'S'};*/
-    /*vis_frame_set(1, 1, title, COLOR_NONE);*/
-
     for (int i = 0; i < OSC_COUNT; i++) {
         // Enabled
         if (_synth[i].enabled) {
@@ -128,13 +124,13 @@ void vis_prerender(int vtick) {
         }
     }
 
-    int pos = (vtick / 32) % (VIS_WIDTH - 2);
-    for (int i = 0; i < OSC_COUNT; i++) {
-        if (_synth[i].enabled) {
-            wchar_t px[2] = {L'▓', L'▓'};
-            vis_frame_set(pos + 1, 0, px, COLOR_YELLOW);
-        }
-    }
+    /*int pos = (vtick / 32) % (VIS_WIDTH - 2);*/
+    /*for (int i = 0; i < OSC_COUNT; i++) {*/
+    /*    if (_synth[i].enabled) {*/
+    /*        wchar_t px[2] = {L'▓', L'▓'};*/
+    /*        vis_frame_set(pos + 1, 0, px, COLOR_YELLOW);*/
+    /*    }*/
+    /*}*/
     
 }
 
