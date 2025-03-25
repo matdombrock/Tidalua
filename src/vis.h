@@ -54,10 +54,10 @@ void vis_prerender(int vtick) {
         }
     }
     wchar_t corner[2] = {L'▓', L'▓'};
-    vis_frame_set(0, 0, corner, COLOR_RED);
-    vis_frame_set(VIS_WIDTH - 1, 0, corner, COLOR_RED);
-    vis_frame_set(0, VIS_HEIGHT - 1, corner, COLOR_RED);
-    vis_frame_set(VIS_WIDTH - 1, VIS_HEIGHT - 1, corner, COLOR_RED);
+    vis_frame_set(0, 0, corner, COLOR_YELLOW);
+    vis_frame_set(VIS_WIDTH - 1, 0, corner, COLOR_YELLOW);
+    vis_frame_set(0, VIS_HEIGHT - 1, corner, COLOR_YELLOW);
+    vis_frame_set(VIS_WIDTH - 1, VIS_HEIGHT - 1, corner, COLOR_YELLOW);
 
     //
     /*wchar_t title[2] = {L'O', L'S'};*/
