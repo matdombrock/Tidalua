@@ -13,7 +13,7 @@
 #define VIS_HEIGHT 16
 #define VIS_NULL_CHAR L'/'
 #define VIS_ENABLE_INPUT 0
-
+#define VIS_BUS_N 16
 
 // This causes wierd issues on macOS
 // Isues with colors and wide characters
@@ -84,7 +84,7 @@ void vis_prerender(int vtick) {
         vis_frame_set(3, i + 2, note_a, color);
         wchar_t note_b[2] = {(note[2] != '\0' ? note[2] : L' '), (note[3] != '\0' ? note[3] : L' ')};
         vis_frame_set(4, i + 2, note_b, color);
-        
+
         // Wave
         // Off, Sine, Square, Saw, Triangle, Noise
         // X, ∿, ⊓, ⭍, ⧊, ⚂
@@ -122,7 +122,58 @@ void vis_prerender(int vtick) {
             }
             vis_frame_set(8 + v, 2 + i, px, vcolor);
         }
+
     }
+    // Volume Monitor Bus
+    float rms_busL = _vis.rms_bus[0];
+    float rms_busR = _vis.rms_bus[1];
+    // Scale the rms value logarithmically
+    rms_busL = logf(rms_busL + 1) / logf(2);
+    rms_busR = logf(rms_busR + 1) / logf(2);
+    // Normalize the volume to N levels
+    int volL = (int)(rms_busL * VIS_BUS_N);
+    int volR = (int)(rms_busR * VIS_BUS_N);
+    volL = volL < VIS_BUS_N ? volL : VIS_BUS_N;
+    volR = volR < VIS_BUS_N ? volR : VIS_BUS_N;
+    volL = volL > 0 ? volL : 0;
+    volR = volR > 0 ? volR : 0;
+    int vcolorL = COLOR_GREEN;
+    int vcolorR = COLOR_GREEN;
+    wchar_t vstrL[VIS_BUS_N] = {L'='};
+    wchar_t vstrR[VIS_BUS_N] = {L'='};
+    for (int v = 0; v < VIS_BUS_N; v++) {
+        if (v < volL) {
+            vstrL[v] = L'=';
+        } else {
+            vstrL[v] = L' ';
+        }
+        if (v < volR) {
+            vstrR[v] = L'=';
+        } else {
+            vstrR[v] = L' ';
+        }
+    }
+    for (int v = 0; v < (VIS_BUS_N / 2); v++) {
+        int pos = v * 2;
+        wchar_t pxL[2] = {vstrL[pos], vstrL[pos + 1]};
+        wchar_t pxR[2] = {vstrR[pos], vstrR[pos + 1]};
+        if (v > 2) {
+            vcolorL = COLOR_YELLOW;
+            vcolorR = COLOR_YELLOW;
+        }
+        if (v > 6) {
+            vcolorL = COLOR_RED;
+            vcolorR = COLOR_RED;
+        }
+        vis_frame_set(3 + v, 11, pxL, vcolorL);
+        vis_frame_set(3 + v, 12, pxR, vcolorR);
+    }
+    wchar_t busL[2] = {L' ', L'L'};
+    wchar_t busR[2] = {L' ', L'R'};
+    vis_frame_set(1, 11, busL, COLOR_YELLOW);
+    vis_frame_set(1, 12, busR, COLOR_YELLOW);
+    /*wchar_t bus[2] = {L'🔊', L'🔊'};*/
+    /*vis_frame_set(8, 9, bus, COLOR_YELLOW);*/
 
     /*int pos = (vtick / 32) % (VIS_WIDTH - 2);*/
     /*for (int i = 0; i < OSC_COUNT; i++) {*/
@@ -131,7 +182,7 @@ void vis_prerender(int vtick) {
     /*        vis_frame_set(pos + 1, 0, px, COLOR_YELLOW);*/
     /*    }*/
     /*}*/
-    
+
 }
 
 void vis_render(int vtick) {

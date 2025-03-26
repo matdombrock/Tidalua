@@ -11,7 +11,7 @@ wave(5, 4)
 wave(1, 5)
 wave(1, 6)
 
-local ampv = 5
+local ampv = 16
 amp(ampv, 1)
 amp(ampv, 2)
 amp(ampv, 3)
@@ -43,8 +43,8 @@ local lfo_wind = lfo1 + lfo2 + lfo3
 if lfo_wind < 2 then lfo_wind = lfo_wind * 0.05 end
 detune(lfo_wind, 5)
 detune(lfo_wind, 6)
-amp(lfo_wind * 0.008, 5)
-amp(lfo_wind * 0.0085, 6)
+amp(lfo_wind * 0.08, 5)
+amp(lfo_wind * 0.085, 6)
 local wind_pan = 0.5 + math.sin(seconds * 64) * 0.5
 wind_pan = wind_pan * 2
 wind_pan = wind_pan - 1

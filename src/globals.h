@@ -59,11 +59,13 @@ Bus _bus = {
 
 typedef struct {
     float rms_buffer[OSC_COUNT][RMS_WINDOW];
-    int rms_index;
     float rms[OSC_COUNT];
+    float rms_buffer_bus[2][RMS_WINDOW];
+    float rms_bus[2];
+    int rms_index;
 } Vis;
 Vis _vis = {
     .rms_buffer = {{0.0f}},
-    .rms_index = 0,
     .rms = {0.0f},
+    .rms_index = 0,
 };

@@ -137,6 +137,7 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
         for (int ii = 0; ii < OSC_COUNT; ii++) {
             if (!_synth[ii].enabled) {
                 samples[ii] = 0;
+                _vis.rms_buffer[ii][_vis.rms_index] = 0;
                 continue;
             }
             enabled_count++;
@@ -151,7 +152,6 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             samples[ii] = sample;
             _vis.rms_buffer[ii][_vis.rms_index] = sample;
         }
-        _vis.rms_index++;
         float mixL = 0;
         float mixR = 0;
         for (int ii = 0; ii < OSC_COUNT; ii++) {
@@ -162,14 +162,17 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             mixL += panL * samples[ii];
             mixR += panR * samples[ii];
         }
-        mixL = mixL / (float)enabled_count;
-        mixR = mixR / (float)enabled_count;
+        /*mixL = mixL / (float)enabled_count;*/
+        /*mixR = mixR / (float)enabled_count;*/
         // Bus lowpass filter
         mixL = synth_lowpass(0, mixL, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
         mixR = synth_lowpass(1, mixR, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
         // Bus AMPLITUDE
         mixL *= _bus.amp;
         mixR *= _bus.amp;
+        // Add to bus rms_buffer
+        _vis.rms_buffer_bus[0][_vis.rms_index] = mixL;
+        _vis.rms_buffer_bus[1][_vis.rms_index] = mixR;
         /**out++ = mix;*/
         out[i * 2] = mixL; // Left
         out[i * 2 + 1] = mixR; // Right
@@ -182,6 +185,7 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             }
         }
         //
+        _vis.rms_index++;
         _sys.sample_num++;
     }
     // Calculate RMS
@@ -193,6 +197,15 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
             }
             _vis.rms[i] = sqrtf(sum / RMS_WINDOW);
         }
+        // Calculate bus RMS
+        float sumL = 0.0f;
+        float sumR = 0.0f;
+        for (int i = 0; i < RMS_WINDOW; i++) {
+            sumL += _vis.rms_buffer_bus[0][i] * _vis.rms_buffer_bus[0][i];
+            sumR += _vis.rms_buffer_bus[1][i] * _vis.rms_buffer_bus[1][i];
+        }
+        _vis.rms_bus[0] = sqrtf(sumL / RMS_WINDOW);
+        _vis.rms_bus[1] = sqrtf(sumR / RMS_WINDOW);
         _vis.rms_index = 0;
     }
 }
