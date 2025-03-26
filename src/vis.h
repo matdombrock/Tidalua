@@ -9,11 +9,6 @@
 #include "globals.h"
 #include "util.h"
 #include "notes.h"
-#define VIS_WIDTH 24
-#define VIS_HEIGHT 16
-#define VIS_NULL_CHAR L'/'
-#define VIS_ENABLE_INPUT 0
-#define VIS_BUS_N 16
 
 // This causes wierd issues on macOS
 // Isues with colors and wide characters
@@ -108,7 +103,7 @@ void vis_prerender(int vtick) {
             if (v < vol) {
                 vstr[v] = L'=';
             } else {
-                vstr[v] = L' ';
+                vstr[v] = L'-';
             }
         }
         for (int v = 0; v < 4; v++) {
@@ -145,12 +140,12 @@ void vis_prerender(int vtick) {
         if (v < volL) {
             vstrL[v] = L'=';
         } else {
-            vstrL[v] = L' ';
+            vstrL[v] = L'-';
         }
         if (v < volR) {
             vstrR[v] = L'=';
         } else {
-            vstrR[v] = L' ';
+            vstrR[v] = L'-';
         }
     }
     for (int v = 0; v < (VIS_BUS_N / 2); v++) {
@@ -165,13 +160,62 @@ void vis_prerender(int vtick) {
             vcolorL = COLOR_RED;
             vcolorR = COLOR_RED;
         }
-        vis_frame_set(3 + v, 11, pxL, vcolorL);
-        vis_frame_set(3 + v, 12, pxR, vcolorR);
+        vis_frame_set(4 + v, 11, pxL, vcolorL);
+        vis_frame_set(4 + v, 12, pxR, vcolorR);
     }
-    wchar_t busL[2] = {L' ', L'L'};
-    wchar_t busR[2] = {L' ', L'R'};
-    vis_frame_set(1, 11, busL, COLOR_YELLOW);
-    vis_frame_set(1, 12, busR, COLOR_YELLOW);
+    wchar_t busL[2] = {L'L', L' '};
+    wchar_t busR[2] = {L'R', L' '};
+    vis_frame_set(3, 11, busL, COLOR_YELLOW);
+    vis_frame_set(3, 12, busR, COLOR_YELLOW);
+    
+    // Draw RMS bus history
+    for (int y = 0; y < VIS_HEIGHT - 2; y++) {
+        wchar_t px[2] = {L' ', L'░'};
+        vis_frame_set(12, y + 1, px, COLOR_GREEN);
+        int diff = VIS_RMS_BUS_HIST - VIS_HEIGHT + 2;
+        int hist_pos = y + diff;
+        if (hist_pos >= 0 && hist_pos < VIS_RMS_BUS_HIST) {
+            float rmsL = _vis.rms_bus_history[0][hist_pos];
+            float rmsR = _vis.rms_bus_history[1][hist_pos];
+            // Scale the rms value logarithmically
+            rmsL = logf(rmsL + 1) / logf(2);
+            rmsR = logf(rmsR + 1) / logf(2);
+            // Normalize the volume to N levels
+            int volL = (int)(rmsL * 8);
+            int volR = (int)(rmsR * 8);
+            volL = volL < 8 ? volL : 8;
+            volR = volR < 8 ? volR : 8;
+            volL = volL > 0 ? volL : 0;
+            volR = volR > 0 ? volR : 0;
+            // Invert L
+            volL = 8 - volL;
+            int vcolorL = COLOR_YELLOW;
+            int vcolorR = COLOR_YELLOW;
+            wchar_t vstrL[8] = {L'*'};
+            wchar_t vstrR[8] = {L'*'};
+            for (int v = 0; v < 8; v++) {
+                if (v < volL) {
+                    vstrL[v] = L' ';
+                } else {
+                    vstrL[v] = L'༶';
+                }
+                if (v < volR) {
+                    vstrR[v] = L'༶';
+                } else {
+                    vstrR[v] = L' ';
+                }
+            }
+            for (int v = 0; v < (8 / 2); v++) {
+                int pos = v * 2;
+                wchar_t pxL[2] = {vstrL[pos], vstrL[pos + 1]};
+                wchar_t pxR[2] = {vstrR[pos], vstrR[pos + 1]};
+                vis_frame_set(14 + v, y + 1, pxL, vcolorL);
+                vis_frame_set(18 + v, y + 1, pxR, vcolorR);
+            }
+        }
+    }
+
+
     /*wchar_t bus[2] = {L'🔊', L'🔊'};*/
     /*vis_frame_set(8, 9, bus, COLOR_YELLOW);*/
 
@@ -182,6 +226,7 @@ void vis_prerender(int vtick) {
     /*        vis_frame_set(pos + 1, 0, px, COLOR_YELLOW);*/
     /*    }*/
     /*}*/
+
 
 }
 

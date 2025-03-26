@@ -63,9 +63,13 @@ typedef struct {
     float rms_buffer_bus[2][RMS_WINDOW];
     float rms_bus[2];
     int rms_index;
+    float rms_bus_history[2][32];
 } Vis;
 Vis _vis = {
     .rms_buffer = {{0.0f}},
     .rms = {0.0f},
+    .rms_buffer_bus = {{0.0f}},
+    .rms_bus = {0.0f},
     .rms_index = 0,
+    .rms_bus_history = {{0.0f}},
 };

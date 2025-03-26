@@ -207,6 +207,13 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
         _vis.rms_bus[0] = sqrtf(sumL / RMS_WINDOW);
         _vis.rms_bus[1] = sqrtf(sumR / RMS_WINDOW);
         _vis.rms_index = 0;
+        // _vis.rms_bus_history uses a FILO pattern
+        for (int i = 0; i < (VIS_RMS_BUS_HIST - 1); i++) {
+            _vis.rms_bus_history[0][i] = _vis.rms_bus_history[0][i + 1];
+            _vis.rms_bus_history[1][i] = _vis.rms_bus_history[1][i + 1];
+        }
+        _vis.rms_bus_history[0][VIS_RMS_BUS_HIST - 1] = _vis.rms_bus[0];
+        _vis.rms_bus_history[1][VIS_RMS_BUS_HIST - 1] = _vis.rms_bus[1];
     }
 }
 
