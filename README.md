@@ -14,6 +14,8 @@ What isn't it?
 - A "serious" audio tool
 - Lab equipment
 
+[!screenshot](doc/screenshot1.png)
+
 ### Scripting Example
 ```lua
 -- Set the waveform for the first voice to square

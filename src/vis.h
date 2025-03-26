@@ -189,7 +189,7 @@ void vis_prerender(int vtick) {
             volR = volR > 0 ? volR : 0;
             // Invert L
             volL = 8 - volL;
-            int vcolorL = COLOR_YELLOW;
+            int vcolorL = COLOR_CYAN;
             int vcolorR = COLOR_YELLOW;
             wchar_t vstrL[8] = {L'*'};
             wchar_t vstrR[8] = {L'*'};
