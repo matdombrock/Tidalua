@@ -1,6 +1,8 @@
 # 🌘🌊 Tidalua 🌊🌒
 An experimental synthesizer that uses Lua scripts to generate sound in a "live coding" environment.
 
+![screenshot](doc/screenshot1.png)
+
 What is it?
 - A modular synthesizer
 - A tracker
@@ -13,8 +15,6 @@ What isn't it?
 - A traditional tracker
 - A "serious" audio tool
 - Lab equipment
-
-[!screenshot](doc/screenshot1.png)
 
 ### Scripting Example
 ```lua
