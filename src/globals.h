@@ -10,6 +10,9 @@ typedef struct {
     int output_mode;
     int sample_acc_i;
     float speed;
+    float luatime;
+    float luatimes[LUA_TIME_WINDOW];
+    int luatimes_index;
     char keypress;
     float memory[16];
 } System;
@@ -21,6 +24,9 @@ System _sys = {
     .seconds = 0.0f,
     .output_mode = 0,
     .speed = 1.0f,
+    .luatime = 0.0f,
+    .luatimes = {0.0f},
+    .luatimes_index = 0,
     .keypress = -1,
     .memory = {0.0f},
 };
@@ -63,7 +69,7 @@ typedef struct {
     float rms_buffer_bus[2][RMS_WINDOW];
     float rms_bus[2];
     int rms_index;
-    float rms_bus_history[2][32];
+    float rms_bus_history[2][VIS_RMS_BUS_HIST];
 } Vis;
 Vis _vis = {
     .rms_buffer = {{0.0f}},

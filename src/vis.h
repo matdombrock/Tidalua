@@ -400,7 +400,7 @@ void vis_loop() {
         vis_prerender(vtick);
         vis_render(vtick);
         run = vis_input();
-        printf("🌊 %.2f | %d | %d | %c\n", _sys.speed, _sys.tick_num, vtick, _sys.keypress);
+        printf("🌊 %.2f | %d | %d | %dµs | %c\n", _sys.speed, _sys.tick_num, vtick, (int)_sys.luatime, _sys.keypress);
         printf("🌘 %s\n", _sys.filepath);
         vtick++;
         usleep(22 * 1000); // Sleep to reduce CPU usage

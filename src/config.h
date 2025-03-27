@@ -5,6 +5,7 @@
 #define BUFFER_SIZE 128 // Number of frames (samples) per buffer
 #define LUA_INDEX 1 // Use lua style indexing (1 = true, 0 = false)
 #define OSC_COUNT 8
+#define LUA_TIME_WINDOW 128
 #define RMS_WINDOW (128 * 8) // This is vis
 #define VIS_WIDTH 24
 #define VIS_HEIGHT 16

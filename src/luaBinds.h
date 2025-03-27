@@ -229,12 +229,10 @@ void luaB_run() {
     if (tick <= _sys.tick_num) return;
 
     struct timespec ts;
-    if (_sys.output_mode == 1) {
-        debug("\nlua start\n");
-        if (clock_gettime(CLOCK_REALTIME, &ts) == -1) {
-            perror("clock_gettime");
-            return;
-        }
+    debug("\nlua start\n");
+    if (clock_gettime(CLOCK_REALTIME, &ts) == -1) {
+        perror("clock_gettime");
+        return;
     }
 
     _sys.tick_num = tick;
@@ -260,16 +258,20 @@ void luaB_run() {
 
     lua_close(L);
 
-    if (_sys.output_mode == 1) {
-        struct timespec ts2;
-        if (clock_gettime(CLOCK_REALTIME, &ts2) == -1) {
-            perror("clock_gettime");
-            return;
-        }
-        // Calculate the time difference in nano seconds
-        long diff = ts2.tv_nsec - ts.tv_nsec;
-        // Log in microseconds
-        debug("lua time: %dµs \n", diff / 1000);
+    struct timespec ts2;
+    if (clock_gettime(CLOCK_REALTIME, &ts2) == -1) {
+        perror("clock_gettime");
+        return;
     }
-
+    // Calculate the time difference in nano seconds
+    // Divide by 1000 to get microseconds
+    _sys.luatimes[_sys.luatimes_index % LUA_TIME_WINDOW] = (ts2.tv_nsec - ts.tv_nsec) / 1000.0f;
+    _sys.luatimes_index++;
+    float sum_time = 0.0f;
+    for (int i = 0; i < LUA_TIME_WINDOW; i++) {
+        sum_time += _sys.luatimes[i];
+    }
+    _sys.luatime = sum_time / (float)LUA_TIME_WINDOW;
+    // Log in microseconds
+    debug("lua time: %dµs \n", _sys.luatimes[_sys.luatimes_index % LUA_TIME_WINDOW]);
 }
