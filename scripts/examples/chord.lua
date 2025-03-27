@@ -6,7 +6,7 @@ enable(3)
 
 -- Play a C major chord
 note("C4", 1)
-freq(439, 2)
+freq("E4", 2)
 note("G4", 3)
 
 solo(2)

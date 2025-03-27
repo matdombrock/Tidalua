@@ -209,8 +209,11 @@ void vis_prerender(int vtick) {
         }
         // Note
         char *note = note_by_freq(_synth[i].freq).name;
-        int is_sharp = _synth[i].freq > note_by_name(note).freq;
-        int is_flat = _synth[i].freq < note_by_name(note).freq;
+        // Cast to int to get a rough comparison 
+        // Using floats leads to minor differences when setting by midi number
+        // Also add a tolerance of 1 Hz
+        int is_sharp = (int)_synth[i].freq > (int)note_by_name(note).freq + 1;
+        int is_flat = (int)_synth[i].freq < (int)note_by_name(note).freq - 1;
         int color = COLOR_GREEN;
         if (is_sharp) {
             color = COLOR_YELLOW;
@@ -443,7 +446,7 @@ void vis_loop() {
     vis_nonblocking();
     while (run) {
         vis_clear();
-        printf("🌘🌊              MOONFORGE              🌊🌒\n");
+        printf("🌘🌊                MOONFORGE               🌊🌒\n");
         vis_prerender(vtick);
         vis_render(vtick);
         run = vis_input();
