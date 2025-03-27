@@ -1,4 +1,4 @@
-# 🌘🌊 Tidalua 🌊🌒
+# 🌘🌊 MOONFORGE 🌊🌒
 An experimental synthesizer that uses Lua scripts to generate sound in a "live coding" environment.
 
 ![screenshot](doc/screenshot1.png)
@@ -59,11 +59,11 @@ The binary and scripts will be placed in the `./out` directory.
 
 # Running
 ```bash
-./tidalua <script_path>.lua [ d | v ] 
+./moonforge <script_path>.lua [ d | v ] 
 ```
 Example:
 ```bash
-./tidalua scripts/lfo.lua
+./moonforge scripts/lfo.lua
 ```
 
 - `d` - Debug mode

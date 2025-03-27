@@ -71,68 +71,129 @@ void vis_prerender(int vtick) {
                 }
             }
         }
-        // spell out TIDALUA
-        int offset = 5;
-        vis_frame_set(offset + 1, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 2, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 3, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 2, 2, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 2, 3, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 2, 4, px3, COLOR_YELLOW);
+        // spell out MOONFORGE
+        int color = COLOR_YELLOW;
+        int ox = 2;
+        int oy = 2;
+        // M
+        vis_frame_set(ox, oy, px3, color);
+        vis_frame_set(ox, oy + 1, px3, color);
+        vis_frame_set(ox, oy + 2, px3, color);
+        vis_frame_set(ox, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy, px3, color);
+        vis_frame_set(ox + 2, oy, px3, color);
+        vis_frame_set(ox + 2, oy + 1, px3, color);
+        vis_frame_set(ox + 2, oy + 2, px3, color);
+        vis_frame_set(ox + 2, oy + 3, px3, color);
+        vis_frame_set(ox + 3, oy, px3, color);
+        vis_frame_set(ox + 4, oy, px3, color);
+        vis_frame_set(ox + 4, oy + 1, px3, color);
+        vis_frame_set(ox + 4, oy + 2, px3, color);
+        vis_frame_set(ox + 4, oy + 3, px3, color);
+        // O
+        ox = 8;
+        vis_frame_set(ox, oy, px3, color);
+        vis_frame_set(ox, oy + 1, px3, color);
+        vis_frame_set(ox, oy + 2, px3, color);
+        vis_frame_set(ox, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy, px3, color);
+        vis_frame_set(ox + 2, oy, px3, color);
+        vis_frame_set(ox + 2, oy + 1, px3, color);
+        vis_frame_set(ox + 2, oy + 2, px3, color);
+        vis_frame_set(ox + 2, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy + 3, px3, color);
+        // O
+        ox = 12;
+        vis_frame_set(ox, oy, px3, color);
+        vis_frame_set(ox, oy + 1, px3, color);
+        vis_frame_set(ox, oy + 2, px3, color);
+        vis_frame_set(ox, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy, px3, color);
+        vis_frame_set(ox + 2, oy, px3, color);
+        vis_frame_set(ox + 2, oy + 1, px3, color);
+        vis_frame_set(ox + 2, oy + 2, px3, color);
+        vis_frame_set(ox + 2, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy + 3, px3, color);
+        // N
+        ox = 16;
+        vis_frame_set(ox, oy, px3, color);
+        vis_frame_set(ox, oy + 1, px3, color);
+        vis_frame_set(ox, oy + 2, px3, color);
+        vis_frame_set(ox, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy + 1, px3, color);
+        vis_frame_set(ox + 2, oy + 2, px3, color);
+        vis_frame_set(ox + 3, oy, px3, color);
+        vis_frame_set(ox + 3, oy + 1, px3, color);
+        vis_frame_set(ox + 3, oy + 2, px3, color);
+        vis_frame_set(ox + 3, oy + 3, px3, color);
+        // F
+        ox = 2;
+        oy = 7;
+        vis_frame_set(ox, oy, px3, color);
+        vis_frame_set(ox, oy + 1, px3, color);
+        vis_frame_set(ox, oy + 2, px3, color);
+        vis_frame_set(ox, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy, px3, color);
+        vis_frame_set(ox + 2, oy, px3, color);
+        vis_frame_set(ox + 1, oy + 2, px3, color);
+        // O
+        ox = 6;
+        vis_frame_set(ox, oy, px3, color);
+        vis_frame_set(ox, oy + 1, px3, color);
+        vis_frame_set(ox, oy + 2, px3, color);
+        vis_frame_set(ox, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy, px3, color);
+        vis_frame_set(ox + 2, oy, px3, color);
+        vis_frame_set(ox + 2, oy + 1, px3, color);
+        vis_frame_set(ox + 2, oy + 2, px3, color);
+        vis_frame_set(ox + 2, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy + 3, px3, color);
+        // R
+        ox = 10;
+        vis_frame_set(ox, oy, px3, color);
+        vis_frame_set(ox, oy + 1, px3, color);
+        vis_frame_set(ox, oy + 2, px3, color);
+        vis_frame_set(ox, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy, px3, color);
+        vis_frame_set(ox + 2, oy + 1, px3, color);
+        vis_frame_set(ox + 1, oy + 2, px3, color);
+        vis_frame_set(ox + 2, oy + 3, px3, color);
+        // G
+        ox = 14;
+        vis_frame_set(ox, oy, px3, color);
+        vis_frame_set(ox, oy + 1, px3, color);
+        vis_frame_set(ox, oy + 2, px3, color);
+        vis_frame_set(ox, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy, px3, color);
+        vis_frame_set(ox + 2, oy, px3, color);
+        vis_frame_set(ox + 2, oy + 2, px3, color);
+        vis_frame_set(ox + 2, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy + 3, px3, color);
+        // E
+        ox = 18;
+        vis_frame_set(ox, oy, px3, color);
+        vis_frame_set(ox, oy + 1, px3, color);
+        vis_frame_set(ox, oy + 2, px3, color);
+        vis_frame_set(ox, oy + 3, px3, color);
+        vis_frame_set(ox + 1, oy, px3, color);
+        vis_frame_set(ox + 2, oy, px3, color);
+        vis_frame_set(ox + 1, oy + 1, px3, color);
+        vis_frame_set(ox + 1, oy + 3, px3, color);
+        vis_frame_set(ox + 2, oy + 3, px3, color);
+        // Underline
+        ox = 2;
+        oy = 12;
+        for (int i = 0; i < 20; i++) {
+            vis_frame_set(ox + i, oy, px3, COLOR_BLACK);
+        }
+        oy = 13;
+        for (int i = 1; i < 19; i++) {
+            vis_frame_set(ox + i, oy, px3, color);
+        }
 
-        vis_frame_set(offset + 5, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 5, 2, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 5, 3, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 5, 4, px3, COLOR_YELLOW);
 
-        vis_frame_set(offset + 7, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 7, 2, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 7, 3, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 7, 4, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 8, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 8, 4, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 9, 2, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 9, 3, px3, COLOR_YELLOW);
 
-        vis_frame_set(offset + 11, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 11, 2, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 11, 3, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 11, 4, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 12, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 13, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 13, 2, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 13, 3, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 13, 4, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 12, 3, px3, COLOR_YELLOW);
 
-        vis_frame_set(offset + 15, 1, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 15, 2, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 15, 3, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 15, 4, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 16, 4, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 17, 4, px3, COLOR_YELLOW);
-
-        vis_frame_set(offset + 15, 6, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 15, 7, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 15, 8, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 15, 9, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 16, 9, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 16, 9, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 17, 6, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 17, 7, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 17, 8, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 17, 9, px3, COLOR_YELLOW);
-
-        vis_frame_set(offset + 15, 11, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 15, 12, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 15, 13, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 15, 14, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 16, 11, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 17, 11, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 17, 12, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 17, 13, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 17, 14, px3, COLOR_YELLOW);
-        vis_frame_set(offset + 16, 13, px3, COLOR_YELLOW);
 
         return;
     }
@@ -382,7 +443,7 @@ void vis_loop() {
     vis_nonblocking();
     while (run) {
         vis_clear();
-        printf("🌘🌊                 TIDALUA                🌊🌒\n");
+        printf("🌘🌊              MOONFORGE              🌊🌒\n");
         vis_prerender(vtick);
         vis_render(vtick);
         run = vis_input();
