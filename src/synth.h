@@ -167,9 +167,16 @@ void synth_get_buffer(Synth_Internal *data, float *out) {
         // Bus lowpass filter
         mixL = synth_lowpass(0, mixL, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
         mixR = synth_lowpass(1, mixR, _bus.lp_cutoff, _bus.lp_resonance / SAMPLE_RATE);
+        // We can get pops on some systems as the audio system inits
+        // Fade in over 32 ticks to avoid this
+        float fadein = 1.0f;
+        if (_sys.tick_num < 32) {
+            fadein = (float)_sys.tick_num / 32.0f;
+            fadein = fadein < 0.1f ? 0.0f : fadein;
+        }
         // Bus AMPLITUDE
-        mixL *= _bus.amp;
-        mixR *= _bus.amp;
+        mixL *= _bus.amp * fadein;
+        mixR *= _bus.amp * fadein;
         // Add to bus rms_buffer
         _vis.rms_buffer_bus[0][_vis.rms_index] = mixL;
         _vis.rms_buffer_bus[1][_vis.rms_index] = mixR;
