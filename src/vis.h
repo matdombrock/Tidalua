@@ -54,6 +54,88 @@ void vis_prerender(int vtick) {
     vis_frame_set(0, VIS_HEIGHT - 1, corner, COLOR_YELLOW);
     vis_frame_set(VIS_WIDTH - 1, VIS_HEIGHT - 1, corner, COLOR_YELLOW);
 
+    if (vtick < VIS_HEIGHT * 2) {
+        wchar_t px[2] = {L'༶', L'༶'};
+        wchar_t px2[2] = {L'༶', L'༶'};
+        wchar_t px3[2] = {L'▓', L'▓'};
+        for (int y = 0; y < VIS_HEIGHT; y++) {
+            for (int x = 0; x < VIS_WIDTH; x++) {
+                /*vis_frame_set(x, y, px, COLOR_BLACK);*/
+                if (y > vtick / 2) {
+                    vis_frame_set(x, y, px, COLOR_BLUE);
+                    if (random() % 6 == 0) vis_frame_set(x, y, px2, COLOR_WHITE);
+                    if (random() % 4 == 0) vis_frame_set(x, y, px, COLOR_CYAN);
+                }
+                if (y == vtick / 2) {
+                    if (random() % 3 == 0) vis_frame_set(x, y, px2, COLOR_WHITE);
+                }
+            }
+        }
+        // spell out TIDALUA
+        int offset = 5;
+        vis_frame_set(offset + 1, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 2, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 3, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 2, 2, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 2, 3, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 2, 4, px3, COLOR_YELLOW);
+
+        vis_frame_set(offset + 5, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 5, 2, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 5, 3, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 5, 4, px3, COLOR_YELLOW);
+
+        vis_frame_set(offset + 7, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 7, 2, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 7, 3, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 7, 4, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 8, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 8, 4, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 9, 2, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 9, 3, px3, COLOR_YELLOW);
+
+        vis_frame_set(offset + 11, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 11, 2, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 11, 3, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 11, 4, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 12, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 13, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 13, 2, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 13, 3, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 13, 4, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 12, 3, px3, COLOR_YELLOW);
+
+        vis_frame_set(offset + 15, 1, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 15, 2, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 15, 3, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 15, 4, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 16, 4, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 17, 4, px3, COLOR_YELLOW);
+
+        vis_frame_set(offset + 15, 6, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 15, 7, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 15, 8, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 15, 9, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 16, 9, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 16, 9, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 17, 6, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 17, 7, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 17, 8, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 17, 9, px3, COLOR_YELLOW);
+
+        vis_frame_set(offset + 15, 11, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 15, 12, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 15, 13, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 15, 14, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 16, 11, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 17, 11, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 17, 12, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 17, 13, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 17, 14, px3, COLOR_YELLOW);
+        vis_frame_set(offset + 16, 13, px3, COLOR_YELLOW);
+
+        return;
+    }
     for (int i = 0; i < OSC_COUNT; i++) {
         // Enabled
         if (_synth[i].enabled) {
@@ -314,7 +396,7 @@ void vis_loop() {
     vis_nonblocking();
     while (run) {
         vis_clear();
-        printf("🌘🌊 Tidalua 🌊🌒\n");
+        printf("🌘🌊                 TIDALUA                🌊🌒\n");
         vis_prerender(vtick);
         vis_render(vtick);
         run = vis_input();

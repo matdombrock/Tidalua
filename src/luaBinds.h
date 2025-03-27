@@ -117,6 +117,9 @@ int luaB_env(lua_State *L) {
     float attack = luaL_checknumber(L, 1) / 128.0f;
     float sustain = luaL_checknumber(L, 2) / 128.0f;
     float release = luaL_checknumber(L, 3) / 128.0f;
+    attack = attack < 0 ? 0 : attack; 
+    sustain = sustain < 0 ? 0 : sustain;
+    release = release < 0 ? 0 : release;
     int target = luaB_get_target(L, 4);
     _synth[target].env[0] = attack;
     _synth[target].env[1] = sustain;
