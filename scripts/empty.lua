@@ -1,0 +1,2 @@
+-- An empty script that does nothing.
+-- Used for debugging and benchmarking

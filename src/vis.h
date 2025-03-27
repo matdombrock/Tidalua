@@ -296,20 +296,6 @@ void vis_prerender(int vtick) {
             }
         }
     }
-
-
-    /*wchar_t bus[2] = {L'🔊', L'🔊'};*/
-    /*vis_frame_set(8, 9, bus, COLOR_YELLOW);*/
-
-    /*int pos = (vtick / 32) % (VIS_WIDTH - 2);*/
-    /*for (int i = 0; i < OSC_COUNT; i++) {*/
-    /*    if (_synth[i].enabled) {*/
-    /*        wchar_t px[2] = {L'▓', L'▓'};*/
-    /*        vis_frame_set(pos + 1, 0, px, COLOR_YELLOW);*/
-    /*    }*/
-    /*}*/
-
-
 }
 
 void vis_render(int vtick) {
@@ -400,7 +386,7 @@ void vis_loop() {
         vis_prerender(vtick);
         vis_render(vtick);
         run = vis_input();
-        printf("🌊 %.2f | %d | %d | %dµs | %c\n", _sys.speed, _sys.tick_num, vtick, (int)_sys.luatime, _sys.keypress);
+        printf("🌊 %.2f | %d | %d | %dµs\n", _sys.speed, _sys.tick_num, vtick, (int)_sys.luatime);
         printf("🌘 %s\n", _sys.filepath);
         vtick++;
         usleep(22 * 1000); // Sleep to reduce CPU usage
