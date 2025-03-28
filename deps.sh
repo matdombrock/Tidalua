@@ -7,6 +7,16 @@ function lua() {
   tar zxf $target.tar.gz
   rm -rf $target.tar.gz
   cd $target
+  
+  # Apply optimization flags for Lua compilation
+  if [[ "$(uname)" == "Darwin" ]]; then
+    # On macOS, use Apple Clang optimizations
+    sed -i '' 's/^CFLAGS= -O2/CFLAGS= -O3 -DNDEBUG -fomit-frame-pointer/g' Makefile
+  else
+    # On Linux
+    sed -i 's/^CFLAGS= -O2/CFLAGS= -O3 -DNDEBUG -fomit-frame-pointer/g' Makefile
+  fi
+  
   make all test
   cd -
   mv $target ./lua
@@ -19,7 +29,16 @@ function portaudio() {
   tar zxf $target.tgz # unpacks to ./portaudio
   rm -rf $target.tgz
   cd portaudio
-  cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF .
+  
+  # Use optimized build flags
+  if [[ "$(uname)" == "Darwin" ]]; then
+    # macOS optimizations
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-O3 -DNDEBUG -fomit-frame-pointer" -DBUILD_SHARED_LIBS=OFF .
+  else
+    # Linux optimizations
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-O3 -DNDEBUG -fomit-frame-pointer" -DBUILD_SHARED_LIBS=OFF .
+  fi
+  
   make all
 }
 

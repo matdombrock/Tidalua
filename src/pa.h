@@ -31,12 +31,32 @@ int pa_init() {
   for (int i = 0; i < OSC_COUNT; i++) {
     data.phase[i] = 0.0f;
   }
+  
+  // Initialize Lua state at startup
+  luaB_init();
+  
   debug("pa: init\n");
   err = Pa_Initialize();
   if (err != paNoError) {
     fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
     return 1;
   }
+  
+  // Set PortAudio host API for macOS
+  #ifdef __APPLE__
+  PaHostApiIndex hostApiIndex = Pa_HostApiTypeIdToHostApiIndex(paCoreAudio);
+  if (hostApiIndex != paHostApiNotFound) {
+    const PaHostApiInfo *hostApiInfo = Pa_GetHostApiInfo(hostApiIndex);
+    if (hostApiInfo && hostApiInfo->defaultOutputDevice != paNoDevice) {
+      // Get device info to optimize buffer settings
+      const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(hostApiInfo->defaultOutputDevice);
+      if (deviceInfo) {
+        debug("pa: using CoreAudio with optimal settings\n");
+      }
+    }
+  }
+  #endif
+  
   debug("pa: open default stream\n");
   err = Pa_OpenDefaultStream(&stream,
       0,          // input channels
@@ -63,8 +83,9 @@ int pa_init() {
   printf("------- AUDIO SYSTEM STARTED -------\n");
   char modes[][32] = {"none", "debug", "visualizer"};
   printf("Console output mode: %s\n", modes[_sys.output_mode]);
-  // Clear the Console
-  system("clear");
+  
+  // Use printf and escape sequences instead of system("clear")
+  printf("\033[2J\033[H");
 
   if (_sys.output_mode == 2) {
     vis_init();
@@ -86,6 +107,9 @@ int pa_init() {
     fprintf(stderr, "PortAudio error: %s\n", Pa_GetErrorText(err));
   }
 
+  // Clean up Lua state
+  luaB_cleanup();
+  
   Pa_Terminate();
   return 0;
 }

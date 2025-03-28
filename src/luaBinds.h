@@ -223,6 +223,26 @@ void luaB_binds(lua_State *L) {
     lua_register(L, "mem_get", luaB_mem_get);
 }
 
+// Global Lua state to avoid constant reallocation
+static lua_State *L_global = NULL;
+
+// Initialize the global Lua state
+void luaB_init() {
+    if (L_global == NULL) {
+        L_global = luaL_newstate();
+        luaB_binds(L_global);
+        luaL_openlibs(L_global);  // Load standard libraries
+    }
+}
+
+// Clean up the global Lua state
+void luaB_cleanup() {
+    if (L_global != NULL) {
+        lua_close(L_global);
+        L_global = NULL;
+    }
+}
+
 void luaB_run() { 
     float seconds = (float)_sys.sample_num / (float)SAMPLE_RATE;
     int tick = floor(seconds * _sys.speed * 128);
@@ -238,40 +258,53 @@ void luaB_run() {
     _sys.tick_num = tick;
     debug("tick: %d\n", tick);
     debug("seconds: %f\n", seconds);
-    // Init a new lua lua_State
-    lua_State *L = luaL_newstate();
-    luaB_binds(L);
-    luaL_openlibs(L);  // Load standard libraries
 
-    // Pass system variables to Lua
-    lua_pushnumber(L, seconds);
-    lua_setglobal(L, "seconds");
-    lua_pushnumber(L, tick);
-    lua_setglobal(L, "tick");
-    lua_pushstring(L, &_sys.keypress);
-    lua_setglobal(L, "keypress");
-
-    if (luaL_dofile(L, _sys.filepath) != LUA_OK) {
-        fprintf(stderr, "Lua error: %s\n", lua_tostring(L, -1));
-        lua_pop(L, 1); // remove error message from stack
+    // Initialize Lua state if needed
+    if (L_global == NULL) {
+        luaB_init();
     }
 
-    lua_close(L);
+    // Reset Lua state for new execution
+    lua_settop(L_global, 0);  // Clear the stack
+
+    // Pass system variables to Lua
+    lua_pushnumber(L_global, seconds);
+    lua_setglobal(L_global, "seconds");
+    lua_pushnumber(L_global, tick);
+    lua_setglobal(L_global, "tick");
+    lua_pushstring(L_global, &_sys.keypress);
+    lua_setglobal(L_global, "keypress");
+
+    if (luaL_dofile(L_global, _sys.filepath) != LUA_OK) {
+        fprintf(stderr, "Lua error: %s\n", lua_tostring(L_global, -1));
+        lua_pop(L_global, 1); // remove error message from stack
+    }
 
     struct timespec ts2;
     if (clock_gettime(CLOCK_REALTIME, &ts2) == -1) {
         perror("clock_gettime");
         return;
     }
+    
     // Calculate the time difference in nano seconds
+    long diff_ns;
+    if (ts2.tv_sec == ts.tv_sec) {
+        diff_ns = ts2.tv_nsec - ts.tv_nsec;
+    } else {
+        diff_ns = (ts2.tv_sec - ts.tv_sec) * 1000000000L + (ts2.tv_nsec - ts.tv_nsec);
+    }
+    
     // Divide by 1000 to get microseconds
-    _sys.luatimes[_sys.luatimes_index % LUA_TIME_WINDOW] = (ts2.tv_nsec - ts.tv_nsec) / 1000.0f;
+    _sys.luatimes[_sys.luatimes_index % LUA_TIME_WINDOW] = diff_ns / 1000.0f;
     _sys.luatimes_index++;
+    
+    // Calculate rolling average
     float sum_time = 0.0f;
     for (int i = 0; i < LUA_TIME_WINDOW; i++) {
         sum_time += _sys.luatimes[i];
     }
     _sys.luatime = sum_time / (float)LUA_TIME_WINDOW;
+    
     // Log in microseconds
-    debug("lua time: %dµs \n", _sys.luatimes[_sys.luatimes_index % LUA_TIME_WINDOW]);
+    debug("lua time: %fµs \n", _sys.luatime);
 }

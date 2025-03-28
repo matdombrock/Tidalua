@@ -5,6 +5,10 @@ project(moonforge)
 # Set the C standard
 set(CMAKE_C_STANDARD 99)
 
+# Set optimization flags
+set(CMAKE_C_FLAGS_RELEASE "-O3")
+set(CMAKE_BUILD_TYPE Release)
+
 # if(APPLE)
 #     # Include directories
 #     include_directories(/opt/homebrew/Cellar/portaudio/19.7.0/include)
@@ -12,7 +16,6 @@ set(CMAKE_C_STANDARD 99)
 #     # Link directories
 #     link_directories(/opt/homebrew/Cellar/portaudio/19.7.0/lib)
 # endif()
-
 
 # Specify the path to the Lua library
 set(LUA_LIB ${CMAKE_SOURCE_DIR}/lua/src/liblua.a)

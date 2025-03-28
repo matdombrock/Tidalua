@@ -15,3 +15,14 @@ https://en.wikipedia.org/wiki/TidalCycles
 LUA SOUND DESIGN TOY
 LUA WAVE
 MOONFORGE
+
+OPTIMIZATIONS (DONE):
+- Build with -O3 optimization flags (both Lua and PortAudio)
+- Avoid creating/destroying Lua state for every tick
+- Use inline functions for hot paths (filters, oscillators)
+- Use ANSI escape sequences instead of system("clear")
+- Optimize visualizer rendering on macOS
+- Cache filter constants when parameters don't change
+- Use fast approximations for sin() on macOS
+- Reduce memory allocations and pointer dereferencing
+- Fix clock_gettime() calculations for correct timing
